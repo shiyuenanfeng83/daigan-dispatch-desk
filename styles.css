@@ -281,6 +281,37 @@ body {
 .card-action:hover { background: var(--primary); color: #fff; }
 .estimate { color: var(--muted); font-size: 12px; margin-top: 8px; }
 
+.addon-section {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(61, 218, 215, 0.25);
+  border-radius: 14px;
+  background: rgba(61, 218, 215, 0.05);
+}
+.addon-section > h4 { margin: 0 0 4px; font-size: 13px; color: var(--cyan); }
+.addon-section .hint { margin: 0 0 12px; }
+.addon-list { display: grid; gap: 12px; max-height: 340px; overflow: auto; padding-right: 4px; }
+.addon-group h4 { margin: 0 0 8px; font-size: 12px; color: #cdd5ee; }
+.addon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+.addon-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 4px 8px;
+  align-items: center;
+  padding: 9px 10px;
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  font-size: 12px;
+}
+.addon-item:hover { border-color: rgba(61, 218, 215, 0.45); background: rgba(61, 218, 215, 0.07); }
+.addon-item input { accent-color: var(--cyan); }
+.addon-name { color: var(--text); }
+.addon-price { color: var(--gold); font-weight: 700; }
+.addon-note { grid-column: 2 / -1; color: var(--muted); font-size: 10px; }
+.addon-total { margin-top: 12px; padding: 9px 12px; border-radius: 10px; background: rgba(255, 203, 107, 0.1); color: #ffe0a6; font-size: 12px; font-weight: 600; }
+
 .steps { margin-top: 26px; padding: 24px; }
 .steps h3, .data-panel h3, .panel h3 { margin: 0 0 16px; font-size: 16px; }
 .step-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
