@@ -91,6 +91,12 @@
               <select id="serviceSelect" name="serviceId" required></select>
             </label>
             <div id="servicePreview" class="service-preview"></div>
+            <div id="addonSection" class="addon-section" hidden>
+              <h4>加购小地图（可多选）</h4>
+              <p class="hint">不拍全图时可在此单独勾选小地图；同一区域可多选，价格按单项累加。</p>
+              <div id="addonList" class="addon-list"></div>
+              <div id="addonTotal" class="addon-total">未选择加购小地图</div>
+            </div>
           </div>
 
           <div class="form-section">
@@ -279,6 +285,7 @@
                 <label class="field"><span>预计耗时（小时）</span><input name="estimateHours" type="number" min="0.5" max="200" step="0.5" value="1" /></label>
                 <label class="field"><span>标签</span><input name="tag" placeholder="例如：热门 / 可包周" /></label>
                 <label class="field check-field"><span>在大厅展示</span><input name="enabled" type="checkbox" checked /></label>
+                <label class="field check-field"><span>按下方可选小地图计费</span><input name="allowAddonPricing" type="checkbox" /></label>
               </div>
               <datalist id="gameOptions">
                 <option value="原神"></option>
