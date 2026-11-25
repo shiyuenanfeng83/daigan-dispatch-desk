@@ -23,12 +23,13 @@
     { id: 'genshin-world', game: '原神', category: '剧情任务', name: '原神世界任务', desc: '按区域清理世界任务与隐藏任务。', price: '¥15 / 个', priceNote: '复杂任务 ¥25-35', includes: '指定世界任务', estimateHours: 2, tag: '探索', enabled: true },
     { id: 'genshin-map', game: '原神', category: '地图探索', name: '原神大地图全收集（大图包小图）', desc: '按大地图打包探索，已包含该区域全部小地图，不重复收费。', price: '¥120 起 / 大图', priceNote: '蒙德120 璃月270 稻妻390 须弥670 枫丹420 纳塔400 挪德卡莱320 至冬200', includes: '大地图及所属小地图、宝箱、解密、成就、神瞳', estimateHours: 10, tag: '大图包', enabled: true },
     { id: 'genshin-chest', game: '原神', category: '地图探索', name: '原神大地图全宝箱专项', desc: '只清指定大地图内全部宝箱，适合已满探账号。', price: '¥150 起 / 大图', priceNote: '蒙德150 璃月320 稻妻500 至冬230，其他区域私聊确认', includes: '指定大地图全部宝箱（含小地图）', estimateHours: 6, tag: '宝箱', enabled: true },
-    { id: 'hsr-commissions', game: '崩坏：星穹铁道', category: '委托代肝', name: '星穹铁道委托代肝（可勾选）', desc: '普通 / 高级 / 半托 / 全托四档日常托管合并为可勾选清单，按月计费。', price: '按下方勾选计费', priceNote: '四档托管互斥，价格按价目表', includes: '普通、高级、半托、全托日常托管（均含每日委托）', estimateHours: 1, tag: '可勾选', allowCommissionPricing: true, enabled: true },
-    { id: 'hsr-story-full', game: '崩坏：星穹铁道', category: '剧情任务', name: '星穹铁道主线区域全包', desc: '按区域打包推进开拓任务。', price: '¥28 起 / 区域', priceNote: '雅利洛VI 28 仙舟罗浮45 匹诺康尼90 二相乐园/千星城120', includes: '指定区域全部主线剧情', estimateHours: 8, tag: '全包', enabled: true },
-    { id: 'hsr-side', game: '崩坏：星穹铁道', category: '剧情任务', name: '星穹铁道开拓续闻 / 同行任务', desc: '推进指定续闻或同行任务。', price: '¥8 / 个', priceNote: '部分任务 ¥10-15 / 个', includes: '指定续闻或同行任务', estimateHours: 1.5, tag: '剧情', enabled: true },
-    { id: 'hsr-events', game: '崩坏：星穹铁道', category: '玩法代肝', name: '星穹铁道常驻活动代肝', desc: '按项完成常驻活动内容，不含剧情。', price: '¥12 / 项', priceNote: '按活动项计费', includes: '指定常驻活动（不含剧情）', estimateHours: 1.5, tag: '活动', enabled: true },
-    { id: 'hsr-map', game: '崩坏：星穹铁道', category: '地图探索', name: '星穹铁道大地图全收集（大图包小图）', desc: '按星球大地图打包，已包含所属小地图与区域内容。', price: '¥15 起 / 大图', priceNote: '空间站15 雅利洛VI30 仙舟罗浮120 匹诺康尼420 翁法罗斯190 二相乐园150', includes: '宝箱、折纸小鸟、解密、成就及小地图', estimateHours: 8, tag: '大图包', enabled: true },
+    { id: 'hsr-commissions', game: '崩坏：星穹铁道', category: '委托代肝', name: '星穹铁道日常托管（可勾选）', desc: '普托 / 精托 / 全托三档托管合并为可勾选清单，按月计费。', price: '按下方勾选计费', priceNote: '三档托管互斥，价格按价目表', includes: '普托、精托、全托（均含每日实训与体力）', estimateHours: 1, tag: '可勾选', allowCommissionPricing: true, enabled: true },
+    { id: 'hsr-story-full', game: '崩坏：星穹铁道', category: '剧情任务', name: '星穹铁道主线任务（大任务可勾选小任务）', desc: '按区域打包或直接勾选版本小任务，区域全包已包含下属任务。', price: '按下方主线加购计费', priceNote: '空间站40 贝洛伯格60 仙舟罗浮130 匹诺康尼170', includes: '区域全包与版本小任务，二者互斥避免重复收费', estimateHours: 8, tag: '可勾选', allowTaskAddonPricing: true, enabled: true },
+    { id: 'hsr-side', game: '崩坏：星穹铁道', category: '剧情任务', name: '星穹铁道同行 / 支线任务', desc: '推进指定同行或支线任务。', price: '¥15 / 个', priceNote: '蓝色同行15/个；紫色支线5-20/个', includes: '指定同行或支线任务', estimateHours: 1.5, tag: '剧情', enabled: true },
+    { id: 'hsr-events', game: '崩坏：星穹铁道', category: '玩法代肝', name: '星穹铁道常驻活动（可勾选）', desc: '常驻活动按项勾选，价格以任务加购箱为准。', price: '按下方加购计费', priceNote: '单项价格按价目表，支持多选累加', includes: '指定常驻活动（不含剧情）', estimateHours: 1.5, tag: '可多选', allowTaskAddonPricing: true, enabled: true },
+    { id: 'hsr-map', game: '崩坏：星穹铁道', category: '地图探索', name: '星穹铁道大地图全收集（大图包小图）', desc: '按星球大地图打包，已包含所属小地图与区域内容。', price: '¥30 起 / 大图', priceNote: '黑塔空间站30 雅利洛六号60 仙舟罗浮140 匹诺康尼255 翁法罗斯400', includes: '宝箱、折纸小鸟、贴纸、成就及小地图', estimateHours: 8, tag: '大图包', enabled: true },
     { id: 'hsr-pulls', game: '崩坏：星穹铁道', category: '玩法代肝', name: '星穹铁道地图抽数代刷', desc: '按抽数完成地图抽卡类收集内容。', price: '¥1.8 / 抽', priceNote: '低探1.8 / 中探2.5 / 高探3.2 每抽', includes: '指定地图抽数', estimateHours: 1, tag: '抽数', enabled: true },
+    { id: 'hsr-sim-select', game: '崩坏：星穹铁道', category: '模拟宇宙', name: '星穹铁道模拟宇宙 / 差分宇宙（可勾选）', desc: '寰宇蝗灾、黄金与机械、不可知域、差分宇宙按小全包 / 大全包勾选。', price: '按下方加购计费', priceNote: '小全包 / 大全包价格按价目表', includes: '模拟宇宙与差分宇宙各类全包', estimateHours: 4, tag: '可勾选', allowTaskAddonPricing: true, enabled: true },
     { id: 'hsr-single-map', game: '崩坏：星穹铁道', category: '地图探索', name: '星穹铁道小地图单独代肝（可多选）', desc: '不拍全图，直接在下单页勾选一个或多个小地图，按单项价格加购。', price: '按下方小地图加购计费', priceNote: '单项价格按价目表，支持多选累加', includes: '在下单页勾选单个小地图，可多选', estimateHours: 1, tag: '可多选', allowAddonPricing: true, enabled: true },
     { id: 'idv-commissions', game: '第五人格', category: '委托代肝', name: '第五人格委托代肝（可勾选）', desc: '签到、首胜、低保、周上限、小托管、大托管合并为可勾选清单。', price: '按下方勾选计费', priceNote: '单项价格按价目表，支持多选累加', includes: '日常委托、周常任务、托管套餐', estimateHours: 1, tag: '可勾选', allowCommissionPricing: true, enabled: true },
     { id: 'idv-notes', game: '第五人格', category: '加页手记', name: '第五人格加页手记主线全包', desc: '按主线打包完成加页手记。', price: '¥35 起 / 全包', priceNote: '曙光症35 厄运一40 厄运二30；单任务 ¥1-6', includes: '对应主线全部任务', estimateHours: 6, tag: '全包', enabled: true },
@@ -37,13 +38,64 @@
     { id: 'idv-feather', game: '第五人格', category: '加页手记', name: '第五人格羽毛添页', desc: '按页完成羽毛添页内容。', price: '¥0.3 / 页', priceNote: '添页 ¥0.35 / 页', includes: '羽毛 / 添页指定页数', estimateHours: 0.5, tag: '添页', enabled: true }
   ];
 
+  const TASK_ADDONS = [
+    { id: 'hsr-story-space-full', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '空间站主线', name: '空间站主线全包', price: 40, hours: 3, note: '含空间站全部主线，不重复收费', kind: 'full' },
+    { id: 'hsr-story-space-1', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '空间站主线', name: '1.0 于昨天是明天', price: 15, hours: 1, note: '单任务' },
+    { id: 'hsr-story-space-2', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '空间站主线', name: '开拓任务 冬梦激醒', price: 25, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-belobog-full', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '贝洛伯格主线', name: '贝洛伯格主线全包', price: 60, hours: 4, note: '含贝洛伯格全部主线，不重复收费', kind: 'full' },
+    { id: 'hsr-story-belobog-1', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '贝洛伯格主线', name: '1.0 于霜雪的旅程', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-belobog-2', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '贝洛伯格主线', name: '1.0 于今天的明天', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-belobog-3', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '贝洛伯格主线', name: '贝洛伯格开拓任务', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-xianzhou-full', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '仙舟罗浮主线', name: '仙舟罗浮主线全包', price: 130, hours: 7, note: '含仙舟罗浮全部主线，不重复收费', kind: 'full' },
+    { id: 'hsr-story-xianzhou-1', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '仙舟罗浮主线', name: '乘槎驭风仙舟游', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-xianzhou-2', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '仙舟罗浮主线', name: '云树百丈蔽重楼', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-xianzhou-3', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '仙舟罗浮主线', name: '劫波渡尽战云收', price: 15, hours: 1, note: '单任务' },
+    { id: 'hsr-story-xianzhou-4', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '仙舟罗浮主线', name: '仙舟开拓任务', price: 25, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-penacony-full', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '匹诺康尼主线', name: '匹诺康尼主线全包', price: 170, hours: 9, note: '含匹诺康尼全部主线，不重复收费', kind: 'full' },
+    { id: 'hsr-story-penacony-1', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '匹诺康尼主线', name: '在群星的摇篮里', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-penacony-2', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '匹诺康尼主线', name: '我们的时代', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-penacony-3', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '匹诺康尼主线', name: '再见，匹诺康尼', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-penacony-4', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '匹诺康尼主线', name: '狂热奔向深渊', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-penacony-5', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '匹诺康尼主线', name: '明霄竞武试锋芒·上', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-penacony-6', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '匹诺康尼主线', name: '明霄竞武试锋芒·下', price: 25, hours: 2, note: '单任务' },
+    { id: 'hsr-story-3x-1', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '3.x 版本主线', name: '3.2 记忆是梦的开场白', price: 30, hours: 2, note: '单任务' },
+    { id: 'hsr-story-3x-2', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '3.x 版本主线', name: '3.3 走过安眠地的花丛', price: 25, hours: 2, note: '单任务' },
+    { id: 'hsr-story-3x-3', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '3.x 版本主线', name: '3.4 夜未眠之前', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-3x-4', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '3.x 版本主线', name: '3.5 成为昨日的明天', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-3x-5', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '3.x 版本主线', name: '3.6 于长夜重返大地', price: 20, hours: 1.5, note: '单任务' },
+    { id: 'hsr-story-3x-6', game: '崩坏：星穹铁道', group: '主线任务', subgroup: '3.x 版本主线', name: '3.7 成为昨日的明天', price: 25, hours: 2, note: '单任务' },
+    { id: 'hsr-sim-swarm-small', game: '崩坏：星穹铁道', group: '模拟宇宙', subgroup: '寰宇蝗灾', name: '寰宇蝗灾 小全包', price: 220, hours: 12, note: '星琼部分拿满', kind: 'full' },
+    { id: 'hsr-sim-swarm-big', game: '崩坏：星穹铁道', group: '模拟宇宙', subgroup: '寰宇蝗灾', name: '寰宇蝗灾 大全包', price: 300, hours: 16, note: '所有奖励拿满', kind: 'full' },
+    { id: 'hsr-sim-gm-small', game: '崩坏：星穹铁道', group: '模拟宇宙', subgroup: '黄金与机械', name: '黄金与机械 小全包', price: 220, hours: 12, note: '星琼部分拿满', kind: 'full' },
+    { id: 'hsr-sim-gm-big', game: '崩坏：星穹铁道', group: '模拟宇宙', subgroup: '黄金与机械', name: '黄金与机械 大全包', price: 300, hours: 16, note: '所有奖励拿满', kind: 'full' },
+    { id: 'hsr-sim-unknown-small', game: '崩坏：星穹铁道', group: '模拟宇宙', subgroup: '不可知域', name: '不可知域 小全包', price: 220, hours: 12, note: '星琼部分拿满', kind: 'full' },
+    { id: 'hsr-sim-unknown-big', game: '崩坏：星穹铁道', group: '模拟宇宙', subgroup: '不可知域', name: '不可知域 大全包', price: 300, hours: 16, note: '所有奖励拿满', kind: 'full' },
+    { id: 'hsr-sim-diff-small', game: '崩坏：星穹铁道', group: '模拟宇宙', subgroup: '差分宇宙', name: '差分宇宙 小全包', price: 200, hours: 12, note: '指定星琼奖励范围', kind: 'full' },
+    { id: 'hsr-sim-diff-big', game: '崩坏：星穹铁道', group: '模拟宇宙', subgroup: '差分宇宙', name: '差分宇宙 大全包', price: 280, hours: 16, note: '所有奖励拿满', kind: 'full' },
+    { id: 'hsr-event-aether', game: '崩坏：星穹铁道', group: '常驻活动', name: '以太战线', price: 80, hours: 5, note: '常驻活动' },
+    { id: 'hsr-event-hunt', game: '崩坏：星穹铁道', group: '常驻活动', name: '猎径密境', price: 20, hours: 1.5, note: '常驻活动' },
+    { id: 'hsr-event-fox', game: '崩坏：星穹铁道', group: '常驻活动', name: '狐斋志异', price: 50, hours: 3, note: '常驻活动' },
+    { id: 'hsr-event-golden', game: '崩坏：星穹铁道', group: '常驻活动', name: '金人旧巷', price: 50, hours: 3, note: '常驻活动' },
+    { id: 'hsr-event-rock', game: '崩坏：星穹铁道', group: '常驻活动', name: '异岩探查', price: 20, hours: 1.5, note: '常驻活动' },
+    { id: 'hsr-event-sword', game: '崩坏：星穹铁道', group: '常驻活动', name: '初花习剑录', price: 20, hours: 1.5, note: '常驻活动' },
+    { id: 'hsr-event-star', game: '崩坏：星穹铁道', group: '常驻活动', name: '星明云窟', price: 70, hours: 4, note: '常驻活动' },
+    { id: 'hsr-event-sky', game: '崩坏：星穹铁道', group: '常驻活动', name: '天空之城', price: 90, hours: 5, note: '常驻活动' },
+    { id: 'hsr-event-scholar', game: '崩坏：星穹铁道', group: '常驻活动', name: '学者家访指南', price: 40, hours: 2.5, note: '常驻活动' },
+    { id: 'hsr-event-paperfold-test', game: '崩坏：星穹铁道', group: '常驻活动', name: '折纸小鸟对对碰（试）', price: 40, hours: 2.5, note: '常驻活动' },
+    { id: 'hsr-event-paperfold', game: '崩坏：星穹铁道', group: '常驻活动', name: '折纸小鸟对对碰（正）', price: 50, hours: 3, note: '常驻活动' },
+    { id: 'hsr-event-chalice', game: '崩坏：星穹铁道', group: '常驻活动', name: '幻造·圣杯战争', price: 65, hours: 4, note: '常驻活动' },
+    { id: 'hsr-event-clock', game: '崩坏：星穹铁道', group: '常驻活动', name: '钟表小子美梦往事', price: 30, hours: 2, note: '常驻活动' },
+    { id: 'hsr-event-pixel', game: '崩坏：星穹铁道', group: '常驻活动', name: '像素飞机大挑战', price: 85, hours: 5, note: '常驻活动' },
+    { id: 'hsr-side-blue', game: '崩坏：星穹铁道', group: '支线任务', name: '蓝色同行任务', price: 15, hours: 1, note: '按个计费' },
+    { id: 'hsr-side-purple', game: '崩坏：星穹铁道', group: '支线任务', name: '紫色支线任务', price: 5, hours: 0.5, note: '按难度 5-20r / 个' }
+  ];
+
   const COMMISSION_ADDONS = [
     { id: 'gi-daily', game: '原神', group: '每日委托', name: '每日委托（单日）', price: 3, unit: '天', hours: 0.5, note: '完成当日四个委托', exclusiveGroup: 'gi-daily' },
     { id: 'gi-monthly', game: '原神', group: '月度委托', name: '月常委托（含每日）', price: 28, unit: '月', hours: 1, note: '已包含每日委托，勿重复勾选', exclusiveGroup: 'gi-daily' },
-    { id: 'hsr-normal', game: '崩坏：星穹铁道', group: '日常托管', name: '普通日常托管（含每日委托）', price: 28, unit: '月', hours: 1, note: '体力、日常实训、每日委托', exclusiveGroup: 'hsr-daily' },
-    { id: 'hsr-advanced', game: '崩坏：星穹铁道', group: '日常托管', name: '高级日常托管', price: 38, unit: '月', hours: 2, note: '普通托管 + 差分 / 货币周积分', exclusiveGroup: 'hsr-daily' },
-    { id: 'hsr-half', game: '崩坏：星穹铁道', group: '日常托管', name: '半托日常托管', price: 68, unit: '月', hours: 3, note: '高级托管 + 大小活动', exclusiveGroup: 'hsr-daily' },
-    { id: 'hsr-full', game: '崩坏：星穹铁道', group: '日常托管', name: '全托日常托管', price: 98, unit: '月', hours: 5, note: '半托托管 + 深渊（尽量打）', exclusiveGroup: 'hsr-daily' },
+    { id: 'hsr-normal', game: '崩坏：星穹铁道', group: '日常托管', name: '普托类（含每日委托）', price: 40, unit: '月', hours: 1, note: '实训每天清、体力清（可指定）+ 签到奖励 + 邮局领取', exclusiveGroup: 'hsr-daily' },
+    { id: 'hsr-advanced', game: '崩坏：星穹铁道', group: '日常托管', name: '精托类', price: 90, unit: '月', hours: 3, note: '普托 + 每周分字 / 货币战争 / 前台兑换码 + 本周模拟宇宙', exclusiveGroup: 'hsr-daily' },
+    { id: 'hsr-full', game: '崩坏：星穹铁道', group: '日常托管', name: '全托类', price: 160, unit: '月', hours: 6, note: '精托 + 本周模拟宇宙 + 深渊三期 + 养成角色', exclusiveGroup: 'hsr-daily' },
     { id: 'idv-checkin', game: '第五人格', group: '日常委托', name: '每日签到', price: 3.5, unit: '周', hours: 0.5, note: '按周计费' },
     { id: 'idv-first-win', game: '第五人格', group: '日常委托', name: '每日首胜', price: 2, unit: '天', hours: 0.3, note: '按天计费' },
     { id: 'idv-rank-low', game: '第五人格', group: '日常委托', name: '排位低保', price: 2, unit: '天', hours: 0.5, note: '按天计费' },
@@ -87,18 +139,37 @@
     { id: 'gi-snezhnaya70', game: '原神', group: '至冬', name: '至冬 7.0', price: 200, hours: 8, note: '满探；全宝箱 ¥230' },
     { id: 'gi-snezhnaya71', game: '原神', group: '至冬', name: '至冬 7.1', price: 160, hours: 6, note: '满探；全宝箱 ¥200' },
     { id: 'gi-snezhnaya72', game: '原神', group: '至冬', name: '至冬 7.2', price: 140, hours: 6, note: '满探' },
-    { id: 'hsr-space', game: '崩坏：星穹铁道', group: '空间站', name: '空间站「黑塔」全收集', price: 15, hours: 2, note: '宝箱、解密、成就' },
-    { id: 'hsr-belobog', game: '崩坏：星穹铁道', group: '雅利洛VI', name: '雅利洛VI 全收集', price: 30, hours: 3, note: '宝箱、解密、成就' },
-    { id: 'hsr-xianzhou', game: '崩坏：星穹铁道', group: '仙舟罗浮', name: '仙舟「罗浮」全收集', price: 120, hours: 6, note: '宝箱、解密、成就' },
-    { id: 'hsr-penacony-chest', game: '崩坏：星穹铁道', group: '匹诺康尼', name: '匹诺康尼 全宝箱', price: 100, hours: 6, note: '单项加购' },
-    { id: 'hsr-penacony-bird', game: '崩坏：星穹铁道', group: '匹诺康尼', name: '匹诺康尼 折纸小鸟', price: 30, hours: 2, note: '单项加购' },
-    { id: 'hsr-penacony-full', game: '崩坏：星穹铁道', group: '匹诺康尼', name: '匹诺康尼 大地图全收集', price: 420, hours: 16, note: '含全宝箱、折纸小鸟、解密、成就', kind: 'full' },
-    { id: 'hsr-amphoreus-chest', game: '崩坏：星穹铁道', group: '翁法罗斯', name: '翁法罗斯 全宝箱', price: 160, hours: 8, note: '单项加购' },
-    { id: 'hsr-amphoreus-cangming', game: '崩坏：星穹铁道', group: '翁法罗斯', name: '翁法罗斯 苍冥', price: 40, hours: 2, note: '单项加购' },
-    { id: 'hsr-amphoreus-sheep', game: '崩坏：星穹铁道', group: '翁法罗斯', name: '翁法罗斯 羊头', price: 15, hours: 1, note: '单项加购' },
-    { id: 'hsr-amphoreus-full', game: '崩坏：星穹铁道', group: '翁法罗斯', name: '翁法罗斯 大地图全收集', price: 190, hours: 10, note: '含全宝箱、苍冥、羊头', kind: 'full' },
-    { id: 'hsr-twoworld', game: '崩坏：星穹铁道', group: '二相乐园', name: '二相乐园 全收集', price: 150, hours: 7, note: '宝箱、解密、成就' },
-    { id: 'hsr-thousand', game: '崩坏：星穹铁道', group: '千星乐园', name: '千星乐园 全收集', price: 85, hours: 5, note: '宝箱、解密、成就' }
+    { id: 'hsr-space-full', game: '崩坏：星穹铁道', group: '黑塔空间站', name: '黑塔空间站 全包', price: 30, hours: 2, note: '含全部舱段，不重复收费', kind: 'full' },
+    { id: 'hsr-space-base', game: '崩坏：星穹铁道', group: '黑塔空间站', name: '基座舱段', price: 6, hours: 0.5, note: '宝箱、解密、成就' },
+    { id: 'hsr-space-containment', game: '崩坏：星穹铁道', group: '黑塔空间站', name: '收容舱段', price: 10, hours: 1, note: '宝箱、解密、成就' },
+    { id: 'hsr-space-support', game: '崩坏：星穹铁道', group: '黑塔空间站', name: '支援舱段', price: 6, hours: 0.5, note: '宝箱、解密、成就' },
+    { id: 'hsr-space-prison', game: '崩坏：星穹铁道', group: '黑塔空间站', name: '禁闭舱段', price: 8, hours: 1, note: '宝箱、解密、成就' },
+    { id: 'hsr-belobog-full', game: '崩坏：星穹铁道', group: '雅利洛六号', name: '雅利洛六号 全包', price: 60, hours: 5, note: '含全部区域，不重复收费', kind: 'full' },
+    { id: 'hsr-belobog-admin', game: '崩坏：星穹铁道', group: '雅利洛六号', name: '行政区', price: 3, hours: 0.3, note: '地图收集' },
+    { id: 'hsr-belobog-snow', game: '崩坏：星穹铁道', group: '雅利洛六号', name: '城郊雪原', price: 3, hours: 0.3, note: '地图收集' },
+    { id: 'hsr-belobog-border', game: '崩坏：星穹铁道', group: '雅利洛六号', name: '边境流通区', price: 7, hours: 0.5, note: '地图收集' },
+    { id: 'hsr-belobog-town', game: '崩坏：星穹铁道', group: '雅利洛六号', name: '磐岩镇', price: 5, hours: 0.5, note: '地图收集' },
+    { id: 'hsr-belobog-mine', game: '崩坏：星穹铁道', group: '雅利洛六号', name: '大矿脉区', price: 7, hours: 0.5, note: '地图收集' },
+    { id: 'hsr-belobog-rivet', game: '崩坏：星穹铁道', group: '雅利洛六号', name: '铆钉镇', price: 5, hours: 0.5, note: '地图收集' },
+    { id: 'hsr-belobog-mech', game: '崩坏：星穹铁道', group: '雅利洛六号', name: '机械聚落', price: 7, hours: 0.5, note: '地图收集' },
+    { id: 'hsr-belobog-guard', game: '崩坏：星穹铁道', group: '雅利洛六号', name: '铁卫禁区', price: 5, hours: 0.5, note: '地图收集' },
+    { id: 'hsr-belobog-winter', game: '崩坏：星穹铁道', group: '雅利洛六号', name: '永冬岭', price: 3, hours: 0.3, note: '地图收集' },
+    { id: 'hsr-belobog-lab', game: '崩坏：星穹铁道', group: '雅利洛六号', name: '旧武器实验场', price: 3, hours: 0.3, note: '地图收集' },
+    { id: 'hsr-xianzhou-full', game: '崩坏：星穹铁道', group: '仙舟罗浮', name: '仙舟罗浮 全包', price: 140, hours: 8, note: '含全部区域，不重复收费', kind: 'full' },
+    { id: 'hsr-xianzhou-star', game: '崩坏：星穹铁道', group: '仙舟罗浮', name: '星槎海中枢', price: 3, hours: 0.3, note: '地图收集' },
+    { id: 'hsr-xianzhou-cloud', game: '崩坏：星穹铁道', group: '仙舟罗浮', name: '流云渡', price: 3, hours: 0.3, note: '地图收集' },
+    { id: 'hsr-xianzhou-yi', game: '崩坏：星穹铁道', group: '仙舟罗浮', name: '迤逦海', price: 3, hours: 0.3, note: '地图收集' },
+    { id: 'hsr-xianzhou-ding', game: '崩坏：星穹铁道', group: '仙舟罗浮', name: '丹鼎司', price: 3, hours: 0.3, note: '地图收集' },
+    { id: 'hsr-xianzhou-lin', game: '崩坏：星穹铁道', group: '仙舟罗浮', name: '鳞渊境', price: 3, hours: 0.3, note: '地图收集' },
+    { id: 'hsr-xianzhou-craft', game: '崩坏：星穹铁道', group: '仙舟罗浮', name: '工造司', price: 15, hours: 1, note: '地图收集' },
+    { id: 'hsr-xianzhou-divine', game: '崩坏：星穹铁道', group: '仙舟罗浮', name: '太卜司', price: 10, hours: 1, note: '地图收集' },
+    { id: 'hsr-xianzhou-prison', game: '崩坏：星穹铁道', group: '仙舟罗浮', name: '幽囚狱', price: 20, hours: 1.5, note: '地图收集' },
+    { id: 'hsr-penacony-full', game: '崩坏：星穹铁道', group: '匹诺康尼', name: '匹诺康尼 全包', price: 255, hours: 12, note: '含全部区域，不重复收费', kind: 'full' },
+    { id: 'hsr-penacony-golden', game: '崩坏：星穹铁道', group: '匹诺康尼', name: '黄金的时刻', price: 15, hours: 1, note: '地图收集' },
+    { id: 'hsr-penacony-reality', game: '崩坏：星穹铁道', group: '匹诺康尼', name: '现实白日梦', price: 5, hours: 0.5, note: '地图收集' },
+    { id: 'hsr-penacony-child', game: '崩坏：星穹铁道', group: '匹诺康尼', name: '稚子的梦', price: 25, hours: 1.5, note: '地图收集' },
+    { id: 'hsr-penacony-other', game: '崩坏：星穹铁道', group: '匹诺康尼', name: '匹诺康尼其他区域', price: 30, hours: 2, note: '地图收集' },
+    { id: 'hsr-amphoreus-full', game: '崩坏：星穹铁道', group: '翁法罗斯', name: '翁法罗斯 全包', price: 400, hours: 18, note: '含全部区域，不重复收费', kind: 'full' }
   ];
 
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -111,6 +182,7 @@
   let boardFilter = '全部';
   let selectedAddons = new Set();
   let selectedCommissions = new Set();
+  let selectedTaskAddons = new Set();
   let toastTimer = null;
 
   function clone(value) {
@@ -632,6 +704,68 @@
     updateServicePreview();
   }
 
+  function getSelectedTaskAddonDetails() {
+    return TASK_ADDONS.filter((item) => selectedTaskAddons.has(item.id));
+  }
+
+  function updateTaskAddonTotal() {
+    const details = getSelectedTaskAddonDetails();
+    const total = details.reduce((sum, item) => sum + item.price, 0);
+    const totalEl = $('#taskAddonTotal');
+    const summaryEl = $('#summaryTaskAddons');
+    if (totalEl) {
+      totalEl.textContent = details.length ? `已选 ${details.length} 项任务，加购合计 ¥${total}` : '未选择加购任务';
+    }
+    if (summaryEl) {
+      summaryEl.innerHTML = details.length ? `
+        <div class="summary-row"><span>加购任务</span><strong>${details.map((item) => esc(item.name)).join('、')}</strong></div>
+        <div class="summary-row"><span>任务加购合计</span><strong class="summary-price">¥${total}</strong></div>
+      ` : '';
+    }
+  }
+
+  function renderTaskAddons(game) {
+    const section = $('#taskAddonSection');
+    const list = $('#taskAddonList');
+    if (!section || !list) return;
+
+    const options = TASK_ADDONS.filter((item) => item.game === game);
+    selectedTaskAddons = new Set([...selectedTaskAddons].filter((id) => options.some((item) => item.id === id)));
+
+    if (!options.length) {
+      section.hidden = true;
+      updateTaskAddonTotal();
+      return;
+    }
+
+    section.hidden = false;
+    const groups = Array.from(new Set(options.map((item) => item.group)));
+    list.innerHTML = groups.map((group) => {
+      const groupItems = options.filter((item) => item.group === group);
+      const hasFull = groupItems.some((item) => item.kind === 'full');
+      return `
+        <details class="addon-group" open>
+          <summary>
+            <span class="addon-scope">任务</span>
+            <strong>${esc(group)}</strong>
+            ${hasFull ? '<em>大任务全包与小任务互斥</em>' : ''}
+          </summary>
+          <div class="addon-grid">
+            ${groupItems.map((item) => `
+              <label class="addon-item ${item.kind === 'full' ? 'full-option' : ''}">
+                <input type="checkbox" data-task-addon-id="${esc(item.id)}" data-kind="${item.kind || 'item'}" ${selectedTaskAddons.has(item.id) ? 'checked' : ''} />
+                <span class="addon-name">${item.subgroup ? `[${esc(item.subgroup)}] ` : ''}${esc(item.name)}</span>
+                <span class="addon-price">¥${item.price}</span>
+                <span class="addon-note">${esc(item.note)}</span>
+              </label>
+            `).join('')}
+          </div>
+        </details>
+      `;
+    }).join('');
+    updateTaskAddonTotal();
+  }
+
   function getSelectedCommissionDetails() {
     return COMMISSION_ADDONS.filter((item) => selectedCommissions.has(item.id));
   }
@@ -759,6 +893,7 @@
       summary.innerHTML = '<h3>当前选择</h3><p class="muted">尚未选择服务</p>';
       renderCommissions('');
       renderAddons('');
+      renderTaskAddons('');
       return;
     }
 
@@ -775,6 +910,7 @@
       ${service.includes ? `<div class="summary-row"><span>包含内容</span><strong>${esc(service.includes)}</strong></div>` : ''}
       <div id="summaryCommissions"></div>
       <div id="summaryAddons"></div>
+      <div id="summaryTaskAddons"></div>
       <div class="summary-row"><span>预计耗时</span><strong>${Number(service.estimateHours) || 1} 小时</strong></div>
     `;
 
@@ -790,6 +926,13 @@
       $('#addonSection').hidden = true;
       selectedAddons.clear();
       updateAddonTotal();
+    }
+
+    if (service.game === '崩坏：星穹铁道') renderTaskAddons(service.game);
+    else {
+      $('#taskAddonSection').hidden = true;
+      selectedTaskAddons.clear();
+      updateTaskAddonTotal();
     }
   }
 
@@ -870,6 +1013,7 @@
             ${order.includes ? `<div class="info-item"><span>包含内容</span><strong>${esc(order.includes)}</strong></div>` : ''}
             ${order.commissions?.length ? `<div class="info-item"><span>勾选委托</span><strong>${order.commissions.map((item) => esc(item.name)).join('、')}</strong></div><div class="info-item"><span>委托合计</span><strong>¥${order.commissionTotal}</strong></div>` : ''}
             ${order.addons?.length ? `<div class="info-item"><span>加购小地图</span><strong>${order.addons.map((addon) => esc(addon.name)).join('、')}</strong></div><div class="info-item"><span>加购合计</span><strong>¥${order.addonTotal}</strong></div>` : ''}
+            ${order.taskAddons?.length ? `<div class="info-item"><span>加购任务</span><strong>${order.taskAddons.map((item) => esc(item.name)).join('、')}</strong></div><div class="info-item"><span>任务加购合计</span><strong>¥${order.taskAddonTotal}</strong></div>` : ''}
           </div>
 
           ${noteParts.length ? `<div class="order-note">备注：${noteParts.map(esc).join(' ｜ ')}</div>` : ''}
@@ -915,7 +1059,7 @@
           <div class="admin-item-head">
             <div>
               <strong>${esc(service.name)}</strong>
-              <div class="admin-meta">${esc(service.game)} / ${esc(service.category || '其他')} · ${esc(price.text)}${service.priceNote ? `（${esc(service.priceNote)}）` : ''}${service.includes ? ` · 含：${esc(service.includes)}` : ''} · ${Number(service.estimateHours) || 1} 小时${service.allowAddonPricing ? ' · 按加购计费' : ''}${service.allowCommissionPricing ? ' · 按委托计费' : ''}${service.enabled === false ? ' · 已隐藏' : ''}</div>
+              <div class="admin-meta">${esc(service.game)} / ${esc(service.category || '其他')} · ${esc(price.text)}${service.priceNote ? `（${esc(service.priceNote)}）` : ''}${service.includes ? ` · 含：${esc(service.includes)}` : ''} · ${Number(service.estimateHours) || 1} 小时${service.allowAddonPricing ? ' · 按加购计费' : ''}${service.allowCommissionPricing ? ' · 按委托计费' : ''}${service.allowTaskAddonPricing ? ' · 按任务加购计费' : ''}${service.enabled === false ? ' · 已隐藏' : ''}</div>
             </div>
             <span class="game-badge" style="--game-color:${gameColor(service.game)}">${esc(service.game)}</span>
           </div>
@@ -962,6 +1106,9 @@
     const addonDetails = service.allowAddonPricing ? getSelectedAddonDetails() : [];
     const addonTotal = addonDetails.reduce((sum, addon) => sum + addon.price, 0);
     const addonHours = addonDetails.reduce((sum, addon) => sum + addon.hours, 0);
+    const taskAddonDetails = service.game === '崩坏：星穹铁道' ? getSelectedTaskAddonDetails() : [];
+    const taskAddonTotal = taskAddonDetails.reduce((sum, item) => sum + item.price, 0);
+    const taskAddonHours = taskAddonDetails.reduce((sum, item) => sum + item.hours, 0);
     if (service.allowCommissionPricing && !commissionDetails.length) {
       showToast('请至少勾选一项委托', 'error');
       return;
@@ -970,15 +1117,21 @@
       showToast('请至少勾选一个小地图', 'error');
       return;
     }
+    if (service.allowTaskAddonPricing && !taskAddonDetails.length) {
+      showToast('请至少勾选一项加购任务', 'error');
+      return;
+    }
 
-    const selectedTotal = commissionTotal + addonTotal;
-    const finalPrice = (service.allowCommissionPricing || service.allowAddonPricing) ? `¥${selectedTotal}` : service.price;
+    const selectedTotal = commissionTotal + addonTotal + taskAddonTotal;
+    const finalPrice = (service.allowCommissionPricing || service.allowAddonPricing || service.allowTaskAddonPricing) ? `¥${selectedTotal}` : service.price;
     const priceNoteParts = [service.priceNote];
     if (commissionDetails.length) priceNoteParts.push(`勾选委托 ¥${commissionTotal}`);
     if (addonDetails.length) priceNoteParts.push(`另加购小地图 ¥${addonTotal}`);
+    if (taskAddonDetails.length) priceNoteParts.push(`另加购任务 ¥${taskAddonTotal}`);
     const includesParts = [service.includes];
     if (commissionDetails.length) includesParts.push(commissionDetails.map((item) => item.name).join('、'));
     if (addonDetails.length) includesParts.push(addonDetails.map((addon) => addon.name).join('、'));
+    if (taskAddonDetails.length) includesParts.push(taskAddonDetails.map((item) => item.name).join('、'));
 
     const data = new FormData(form);
     const nextIndex = state.orders.reduce((max, order) => Math.max(max, Number(order.queueIndex ?? 0)), -1) + 1;
@@ -995,7 +1148,9 @@
       commissionTotal,
       addons: addonDetails.map((addon) => ({ id: addon.id, name: addon.name, price: addon.price, note: addon.note })),
       addonTotal,
-      estimateHours: (Number(service.estimateHours) || 1) + commissionHours + addonHours,
+      taskAddons: taskAddonDetails.map((item) => ({ id: item.id, name: item.name, price: item.price, note: item.note })),
+      taskAddonTotal,
+      estimateHours: (Number(service.estimateHours) || 1) + commissionHours + addonHours + taskAddonHours,
       customerAccount: getCurrentUser()?.username || '',
       customerName: String(data.get('customerName') || '').trim(),
       contactType: String(data.get('contactType') || ''),
@@ -1030,11 +1185,13 @@
       ${order.includes ? `<div class="summary-row"><span>包含内容</span><strong>${esc(order.includes)}</strong></div>` : ''}
       ${order.commissions?.length ? `<div class="summary-row"><span>勾选委托</span><strong>${order.commissions.map((item) => esc(item.name)).join('、')}</strong></div><div class="summary-row"><span>委托合计</span><strong class="summary-price">¥${order.commissionTotal}</strong></div>` : ''}
       ${order.addons?.length ? `<div class="summary-row"><span>加购小地图</span><strong>${order.addons.map((addon) => esc(addon.name)).join('、')}</strong></div><div class="summary-row"><span>加购合计</span><strong class="summary-price">¥${order.addonTotal}</strong></div>` : ''}
+      ${order.taskAddons?.length ? `<div class="summary-row"><span>加购任务</span><strong>${order.taskAddons.map((item) => esc(item.name)).join('、')}</strong></div><div class="summary-row"><span>任务加购合计</span><strong class="summary-price">¥${order.taskAddonTotal}</strong></div>` : ''}
       <p class="muted">已按下单时间进入队列，预计开工：${esc(order.estimateStart ? formatDateTime(order.estimateStart) : '待排')}</p>
     `;
     form.reset();
     selectedCommissions.clear();
     selectedAddons.clear();
+    selectedTaskAddons.clear();
     renderAll();
     showToast('订单已提交，请在右侧查看排单号', 'success');
     result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1112,6 +1269,8 @@
       `委托合计：¥${order.commissionTotal || 0}`,
       `加购小地图：${order.addons?.length ? order.addons.map((addon) => `${addon.name} ¥${addon.price}`).join('、') : '-'}`,
       `加购合计：¥${order.addonTotal || 0}`,
+      `加购任务：${order.taskAddons?.length ? order.taskAddons.map((item) => `${item.name} ¥${item.price}`).join('、') : '-'}`,
+      `任务加购合计：¥${order.taskAddonTotal || 0}`,
       `顾客：${order.customerName}`,
       `账户：${order.customerAccount || '-'}`,
       `联系方式：${order.contactType} ${order.contact}`,
@@ -1185,7 +1344,8 @@
       tag: String(data.get('tag') || '').trim(),
       enabled: data.has('enabled'),
       allowAddonPricing: data.has('allowAddonPricing'),
-      allowCommissionPricing: data.has('allowCommissionPricing')
+      allowCommissionPricing: data.has('allowCommissionPricing'),
+      allowTaskAddonPricing: data.has('allowTaskAddonPricing')
     };
 
     if (!payload.game || !payload.category || !payload.name) {
@@ -1228,6 +1388,8 @@
     if (addonPricingInput) addonPricingInput.checked = service.allowAddonPricing === true;
     const commissionPricingInput = form.elements.namedItem('allowCommissionPricing');
     if (commissionPricingInput) commissionPricingInput.checked = service.allowCommissionPricing === true;
+    const taskPricingInput = form.elements.namedItem('allowTaskAddonPricing');
+    if (taskPricingInput) taskPricingInput.checked = service.allowTaskAddonPricing === true;
     $('#serviceFormTitle').textContent = '编辑代肝服务';
     $('#serviceSubmitBtn').textContent = '保存修改';
     $('#cancelEditService').hidden = false;
@@ -1488,6 +1650,28 @@
         selectedAddons.delete(id);
       }
       renderAddons(getService($('#serviceSelect').value)?.game || '');
+    });
+    $('#taskAddonList').addEventListener('change', (event) => {
+      const input = event.target.closest('input[data-task-addon-id]');
+      if (!input) return;
+      const id = input.dataset.taskAddonId;
+      if (input.checked) {
+        const item = TASK_ADDONS.find((entry) => entry.id === id);
+        if (item) {
+          const itemKey = item.subgroup || item.group;
+          selectedTaskAddons = new Set([...selectedTaskAddons].filter((selectedId) => {
+            const selected = TASK_ADDONS.find((entry) => entry.id === selectedId);
+            if (!selected) return true;
+            const selectedKey = selected.subgroup || selected.group;
+            if (selectedKey !== itemKey) return true;
+            return item.kind !== 'full' && selected.kind !== 'full';
+          }));
+        }
+        selectedTaskAddons.add(id);
+      } else {
+        selectedTaskAddons.delete(id);
+      }
+      renderTaskAddons(getService($('#serviceSelect').value)?.game || '');
     });
     $('#orderForm').addEventListener('submit', submitOrder);
     $('#registerForm').addEventListener('submit', registerUser);
