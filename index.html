@@ -350,6 +350,16 @@
           <input id="boardSearch" class="search" type="search" placeholder="搜索顾客 / 游戏 / 服务..." aria-label="搜索订单" />
         </div>
 
+        <div class="panel import-panel">
+          <h3>导入顾客订单</h3>
+          <p class="hint">顾客下单后会获得"订单凭证码 / 分享链接"并通过客服 QQ 发给你。粘贴到下方即可导入排单看板；支持同时粘贴多条（每行一条），已存在的订单会自动跳过。</p>
+          <textarea id="orderCodeInput" rows="3" placeholder="粘贴订单凭证码或分享链接，每行一条..."></textarea>
+          <div class="import-actions">
+            <button class="btn primary" data-action="import-order-codes">导入订单</button>
+            <span id="importResult" class="muted"></span>
+          </div>
+        </div>
+
         <div id="orderList" class="order-list"></div>
       </div>
     </section>

@@ -464,6 +464,30 @@
     return Math.random().toString(36).slice(2, 10);
   }
 
+  function encodeOrderCode(order) {
+    const json = JSON.stringify({ v: 1, order });
+    const bytes = new TextEncoder().encode(json);
+    let binary = '';
+    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+    return btoa(binary);
+  }
+
+  function decodeOrderCode(code) {
+    const normalized = String(code || '').trim();
+    if (!normalized) throw new Error('empty code');
+    const binary = atob(normalized);
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    const payload = JSON.parse(new TextDecoder().decode(bytes));
+    const order = payload?.v === 1 ? payload.order : null;
+    if (!order || typeof order !== 'object' || !order.id) throw new Error('invalid code');
+    return order;
+  }
+
+  function buildOrderLink(code) {
+    const base = `${location.origin}${location.pathname}`;
+    return `${base}?order=${encodeURIComponent(code)}`;
+  }
+
   async function hashPassword(password, salt) {
     const text = `${salt}:${password}`;
     if (globalThis.crypto?.subtle?.digest) {
@@ -1452,6 +1476,16 @@
       ${order.addons?.length ? `<div class="summary-row"><span>加购小地图</span><strong>${order.addons.map((addon) => esc(addon.name)).join('、')}</strong></div><div class="summary-row"><span>加购合计</span><strong class="summary-price">¥${order.addonTotal}</strong></div>` : ''}
       ${order.taskAddons?.length ? `<div class="summary-row"><span>加购任务</span><strong>${order.taskAddons.map((item) => esc(item.name)).join('、')}</strong></div><div class="summary-row"><span>任务加购合计</span><strong class="summary-price">¥${order.taskAddonTotal}</strong></div>` : ''}
       <p class="muted">已按下单时间进入队列，预计开工：${esc(order.estimateStart ? formatDateTime(order.estimateStart) : '待排')}</p>
+      <div class="order-code-box">
+        <h4>发送给店主 · 查询排单</h4>
+        <p class="hint">本站为静态页面，订单只保存在你的浏览器。请把下方<strong>凭证码</strong>或<strong>分享链接</strong>通过客服 QQ 发给店主，店主导入后即可在排单看板查询到你的订单。</p>
+        <label class="field"><span>订单凭证码</span><textarea id="orderCodeText" rows="3" readonly>${esc(encodeOrderCode(order))}</textarea></label>
+        <label class="field"><span>一键分享链接（店主打开可自动导入）</span><textarea id="orderLinkText" rows="2" readonly>${esc(buildOrderLink(encodeOrderCode(order)))}</textarea></label>
+        <div class="order-code-actions">
+          <button class="mini-btn" data-action="copy-order-code">复制凭证码</button>
+          <button class="mini-btn" data-action="copy-order-link">复制分享链接</button>
+        </div>
+      </div>
     `;
     form.reset();
     selectedCommissions.clear();
@@ -1565,6 +1599,111 @@
     } else {
       fallback();
     }
+  }
+
+  function copyTextValue(value, message) {
+    const fallback = () => {
+      const textarea = document.createElement('textarea');
+      textarea.value = value;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+      showToast(message, 'success');
+    };
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(value).then(() => showToast(message, 'success')).catch(fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  function copyOrderCode() {
+    const el = $('#orderCodeText');
+    if (el?.value) copyTextValue(el.value, '凭证码已复制，请发给店主');
+  }
+
+  function copyOrderLink() {
+    const el = $('#orderLinkText');
+    if (el?.value) copyTextValue(el.value, '分享链接已复制，请发给店主');
+  }
+
+  function normalizeOrderForImport(raw) {
+    if (!raw || typeof raw !== 'object' || !raw.id) throw new Error('invalid order');
+    return {
+      ...raw,
+      id: String(raw.id),
+      status: ['pending', 'doing', 'done', 'cancelled'].includes(raw.status) ? raw.status : 'pending',
+      pinned: raw.pinned === true,
+      commissions: Array.isArray(raw.commissions) ? raw.commissions : [],
+      addons: Array.isArray(raw.addons) ? raw.addons : [],
+      taskAddons: Array.isArray(raw.taskAddons) ? raw.taskAddons : [],
+      customerAccount: raw.customerAccount || '',
+      createdAt: raw.createdAt || new Date().toISOString()
+    };
+  }
+
+  function importOrderFromText(text) {
+    const value = String(text || '').trim();
+    if (!value) return { added: 0, skipped: 0, failed: 0 };
+    let code = value;
+    try {
+      const url = new URL(value);
+      code = url.searchParams.get('order') || value;
+    } catch { /* 纯凭证码，直接使用 */ }
+    const order = normalizeOrderForImport(decodeOrderCode(code));
+    if (state.orders.some((item) => item.id === order.id)) return { added: 0, skipped: 1, failed: 0 };
+    order.queueIndex = state.orders.reduce((max, item) => Math.max(max, Number(item.queueIndex ?? 0)), -1) + 1;
+    state.orders.push(order);
+    return { added: 1, skipped: 0, failed: 0 };
+  }
+
+  function importOrderCodes() {
+    const input = $('#orderCodeInput');
+    const resultEl = $('#importResult');
+    if (!input) return;
+    const lines = String(input.value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+    if (!lines.length) {
+      if (resultEl) resultEl.textContent = '请先粘贴订单凭证码或分享链接';
+      showToast('请先粘贴订单凭证码', 'error');
+      return;
+    }
+    const total = { added: 0, skipped: 0, failed: 0 };
+    lines.forEach((line) => {
+      try {
+        const result = importOrderFromText(line);
+        total.added += result.added;
+        total.skipped += result.skipped;
+        total.failed += result.failed;
+      } catch {
+        total.failed += 1;
+      }
+    });
+    saveState();
+    recalculateSchedule();
+    renderAll();
+    input.value = '';
+    const summary = `导入 ${total.added} 条，跳过重复 ${total.skipped} 条，失败 ${total.failed} 条`;
+    if (resultEl) resultEl.textContent = summary;
+    showToast(summary, total.added ? 'success' : 'error');
+  }
+
+  function importOrderFromUrl() {
+    try {
+      const url = new URL(location.href);
+      const code = url.searchParams.get('order');
+      if (!code) return;
+      const result = importOrderFromText(code);
+      url.searchParams.delete('order');
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
+      saveState();
+      recalculateSchedule();
+      renderAll();
+      switchView('board');
+      showToast(result.added ? '已从分享链接导入顾客订单' : (result.skipped ? '该订单已存在，无需重复导入' : '订单码无效'), result.added || result.skipped ? 'success' : 'error');
+    } catch { /* 链接无订单参数，忽略 */ }
   }
 
   function saveSettings(event) {
@@ -1896,6 +2035,15 @@
       case 'copy-order':
         copyOrderInfo(id);
         break;
+      case 'copy-order-code':
+        copyOrderCode();
+        break;
+      case 'copy-order-link':
+        copyOrderLink();
+        break;
+      case 'import-order-codes':
+        importOrderCodes();
+        break;
       case 'edit-service':
         editService(id);
         break;
@@ -2035,6 +2183,7 @@
     recalculateSchedule();
     bindEvents();
     renderAll();
+    importOrderFromUrl();
   }
 
   init();
