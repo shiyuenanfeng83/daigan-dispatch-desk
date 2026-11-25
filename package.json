@@ -1,0 +1,9 @@
+{
+  "name": "daigan-dispatch-desk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "大学生代肝接单、服务定制与自动排单本地网站",
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}

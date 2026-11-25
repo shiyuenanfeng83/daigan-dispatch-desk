@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="课余代肝接单大厅、顾客下单、服务定制与自动排单看板" />
+  <title>课余代肝台 · 接单排单台</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-glow glow-a"></div>
+  <div class="bg-glow glow-b"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">DG</div>
+      <div class="brand-text">
+        <strong>课余代肝台</strong>
+        <span>DISPATCH DESK</span>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="主导航">
+      <button class="nav-btn active" data-view="hall">接单大厅</button>
+      <button class="nav-btn" data-view="order">顾客下单</button>
+      <button class="nav-btn" data-view="board">排单看板</button>
+      <button class="nav-btn" data-view="admin">管理模式</button>
+    </nav>
+
+    <button class="lock-pill" id="lockPill" data-action="toggle-lock">未解锁</button>
+  </header>
+
+  <main class="shell">
+    <!-- 接单大厅 -->
+    <section id="view-hall" class="view active">
+      <div class="hero panel">
+        <div class="hero-copy">
+          <span class="eyebrow">STUDENT BOOST SERVICE</span>
+          <h1 id="hallTitle">课余代肝 · 接单大厅</h1>
+          <p id="hallIntro"></p>
+          <div class="notice" id="hallNotice"></div>
+          <div class="hero-actions">
+            <button class="btn primary" data-action="go-order">立即下单</button>
+            <button class="btn ghost" data-action="go-board">查看排单</button>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div><strong id="statServices">0</strong><span>在售服务</span></div>
+          <div><strong id="statPending">0</strong><span>待排单</span></div>
+          <div><strong id="statDoing">0</strong><span>进行中</span></div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <h2>服务清单</h2>
+          <p>按游戏筛选，价格由我在管理模式中自行填写</p>
+        </div>
+        <input id="hallSearch" class="search" type="search" placeholder="搜索服务名称或内容..." aria-label="搜索服务" />
+      </div>
+
+      <div class="filter-chips" id="gameFilters"></div>
+      <div class="service-grid" id="serviceGrid"></div>
+
+      <div class="steps panel">
+        <h3>下单流程</h3>
+        <div class="step-grid">
+          <div class="step"><span>01</span><strong>选服务</strong><p>在原神、星穹铁道、第五人格等服务中挑选。</p></div>
+          <div class="step"><span>02</span><strong>填信息</strong><p>留下联系方式、付款方式与游戏账号资料。</p></div>
+          <div class="step"><span>03</span><strong>拿排单号</strong><p>提交后按时间进入队列，页面显示预计排单号。</p></div>
+          <div class="step"><span>04</span><strong>确认开工</strong><p>我会在管理模式确认订单并联系你交付。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 顾客下单 -->
+    <section id="view-order" class="view">
+      <div class="section-head">
+        <div>
+          <h2>顾客下单</h2>
+          <p>请如实填写，带 <em>*</em> 为必填项</p>
+        </div>
+      </div>
+
+      <div class="order-layout">
+        <form id="orderForm" class="panel form-panel" novalidate>
+          <div class="form-section">
+            <h3><span>1</span> 选择服务</h3>
+            <label class="field">
+              <span>代肝服务 <em>*</em></span>
+              <select id="serviceSelect" name="serviceId" required></select>
+            </label>
+            <div id="servicePreview" class="service-preview"></div>
+          </div>
+
+          <div class="form-section">
+            <h3><span>2</span> 联系方式</h3>
+            <div class="grid-2">
+              <label class="field">
+                <span>你的称呼 <em>*</em></span>
+                <input name="customerName" required maxlength="30" placeholder="例如：同学 / 昵称" />
+              </label>
+              <label class="field">
+                <span>联系方式类型 <em>*</em></span>
+                <select name="contactType" required>
+                  <option value="微信">微信</option>
+                  <option value="QQ">QQ</option>
+                  <option value="手机">手机</option>
+                  <option value="邮箱">邮箱</option>
+                </select>
+              </label>
+              <label class="field span-2">
+                <span>联系方式 <em>*</em></span>
+                <input name="contact" required maxlength="80" placeholder="用于确认订单与付款" />
+              </label>
+              <label class="field">
+                <span>期望付款方式</span>
+                <select name="paymentMethod">
+                  <option value="微信">微信</option>
+                  <option value="支付宝">支付宝</option>
+                  <option value="QQ">QQ</option>
+                  <option value="其他">其他 / 私聊确认</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>可接受开工时间</span>
+                <select name="availableTime">
+                  <option value="随时">随时</option>
+                  <option value="工作日晚间">工作日晚间</option>
+                  <option value="周末">周末</option>
+                  <option value="仅假期">仅假期</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3><span>3</span> 游戏账号</h3>
+            <div class="grid-2">
+              <label class="field">
+                <span>游戏账号 / UID <em>*</em></span>
+                <input name="accountUid" required maxlength="60" placeholder="例如：米哈游 UID / 第五人格账号" />
+              </label>
+              <label class="field">
+                <span>区服 / 平台</span>
+                <input name="server" maxlength="40" placeholder="例如：官服 B 服 / iOS" />
+              </label>
+              <label class="field">
+                <span>角色名</span>
+                <input name="roleName" maxlength="40" placeholder="游戏内昵称" />
+              </label>
+              <label class="field">
+                <span>登录方式</span>
+                <select name="loginType">
+                  <option value="账号密码">账号密码</option>
+                  <option value="扫码登录">扫码登录</option>
+                  <option value="验证码登录">验证码登录</option>
+                  <option value="其他">其他</option>
+                </select>
+              </label>
+              <label class="field span-2">
+                <span>账号备注 / 验证信息</span>
+                <textarea name="accountNote" rows="3" maxlength="300" placeholder="例如：登录地区、二级密码、注意事项"></textarea>
+              </label>
+            </div>
+            <p class="hint warn">账号信息仅保存在你当前使用的这台设备浏览器中。建议不要填写真实密码，交付时再私下确认。</p>
+          </div>
+
+          <div class="form-section">
+            <h3><span>4</span> 订单备注</h3>
+            <label class="field">
+              <span>补充说明</span>
+              <textarea name="remark" rows="3" maxlength="500" placeholder="例如：想优先清每日、指定角色任务、截止日期等"></textarea>
+            </label>
+            <label class="check">
+              <input type="checkbox" name="agreement" required />
+              <span>我确认所填账号信息可用于代肝，并会与接单者私下确认付款与登录细节。</span>
+            </label>
+          </div>
+
+          <button class="btn primary wide" type="submit">提交订单并获取排单号</button>
+        </form>
+
+        <aside class="order-side">
+          <div class="panel summary-panel" id="orderSummary"></div>
+          <div class="panel notice-panel">
+            <h3>付款说明</h3>
+            <p id="paymentInfo"></p>
+          </div>
+          <div id="orderResult" class="panel success-panel" hidden></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 排单看板 -->
+    <section id="view-board" class="view">
+      <div id="boardLocked" class="lock-panel panel" hidden>
+        <div class="lock-icon">LK</div>
+        <h2>排单看板已锁定</h2>
+        <p>请输入管理模式密码，查看订单联系方式与排单队列。</p>
+        <div class="lock-form">
+          <input id="boardPass" type="password" placeholder="管理模式密码" />
+          <button class="btn primary" data-action="unlock-board">解锁看板</button>
+        </div>
+        <p class="hint">初始密码为 123456，可在管理模式中修改。</p>
+      </div>
+
+      <div id="boardContent">
+        <div class="section-head">
+          <div>
+            <h2>排单看板</h2>
+            <p>默认按下单时间排队，可置顶、上移、下移或按时间重排</p>
+          </div>
+          <button class="btn primary" data-action="auto-schedule">按时间重排</button>
+        </div>
+
+        <div class="stat-strip" id="boardStats"></div>
+
+        <div class="board-toolbar">
+          <div class="filter-chips" id="boardFilters"></div>
+          <input id="boardSearch" class="search" type="search" placeholder="搜索顾客 / 游戏 / 服务..." aria-label="搜索订单" />
+        </div>
+
+        <div id="orderList" class="order-list"></div>
+      </div>
+    </section>
+
+    <!-- 管理模式 -->
+    <section id="view-admin" class="view">
+      <div id="adminLocked" class="lock-panel panel">
+        <div class="lock-icon">AD</div>
+        <h2>管理模式</h2>
+        <p>用于定制大厅内容、创建服务、管理订单与排单。</p>
+        <form id="adminLoginForm" class="lock-form">
+          <input id="adminPass" type="password" placeholder="管理模式密码" required />
+          <button class="btn primary" type="submit">进入管理模式</button>
+        </form>
+        <p class="hint">初始密码为 123456，进入后请立即修改。</p>
+      </div>
+
+      <div id="adminContent" hidden>
+        <div class="section-head">
+          <div>
+            <h2>管理模式</h2>
+            <p>所有修改会立即保存在当前浏览器中</p>
+          </div>
+          <button class="btn ghost" data-action="lock-all">锁定管理</button>
+        </div>
+
+        <div class="admin-grid">
+          <form id="settingsForm" class="panel form-panel">
+            <h3>大厅内容设置</h3>
+            <label class="field"><span>大厅标题</span><input name="title" required /></label>
+            <label class="field"><span>大厅介绍</span><textarea name="intro" rows="3"></textarea></label>
+            <label class="field"><span>公告 / 注意事项</span><textarea name="notice" rows="3"></textarea></label>
+            <label class="field"><span>付款说明</span><textarea name="payment" rows="2"></textarea></label>
+            <div class="grid-2">
+              <label class="field"><span>每日可肝小时数</span><input name="hoursPerDay" type="number" min="0.5" max="24" step="0.5" required /></label>
+              <label class="field"><span>开工时间</span><input name="workStart" type="time" required /></label>
+            </div>
+            <label class="field"><span>管理模式密码</span><input name="password" minlength="4" required /></label>
+            <button class="btn primary wide" type="submit">保存大厅设置</button>
+          </form>
+
+          <div class="admin-stack">
+            <form id="serviceForm" class="panel form-panel">
+              <div class="form-head">
+                <h3 id="serviceFormTitle">创建代肝服务</h3>
+                <button type="button" class="text-btn" id="cancelEditService" hidden>取消编辑</button>
+              </div>
+              <div class="grid-2">
+                <label class="field"><span>游戏 <em>*</em></span><input name="game" list="gameOptions" required placeholder="例如：原神" /></label>
+                <label class="field"><span>分类 <em>*</em></span><input name="category" required placeholder="例如：剧情任务" /></label>
+                <label class="field span-2"><span>服务名称 <em>*</em></span><input name="name" required placeholder="例如：原神每日委托代肝" /></label>
+                <label class="field span-2"><span>服务内容</span><textarea name="desc" rows="2" placeholder="说明包含哪些内容"></textarea></label>
+                <label class="field"><span>价格（自行填写）</span><input name="price" placeholder="例如：15 / 小时 或 30 / 天" /></label>
+                <label class="field"><span>预计耗时（小时）</span><input name="estimateHours" type="number" min="0.5" max="200" step="0.5" value="1" /></label>
+                <label class="field"><span>标签</span><input name="tag" placeholder="例如：热门 / 可包周" /></label>
+                <label class="field check-field"><span>在大厅展示</span><input name="enabled" type="checkbox" checked /></label>
+              </div>
+              <datalist id="gameOptions">
+                <option value="原神"></option>
+                <option value="崩坏：星穹铁道"></option>
+                <option value="第五人格"></option>
+              </datalist>
+              <button class="btn primary wide" type="submit" id="serviceSubmitBtn">创建服务</button>
+            </form>
+
+            <div class="panel">
+              <div class="form-head"><h3>服务列表</h3><span id="serviceCount" class="muted"></span></div>
+              <div id="serviceAdminList" class="admin-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel data-panel">
+          <h3>数据备份与恢复</h3>
+          <p class="muted">数据只存在当前浏览器。换设备或清理缓存前，请先导出备份。</p>
+          <div class="data-actions">
+            <button class="btn ghost" data-action="export">导出备份 JSON</button>
+            <button class="btn ghost" data-action="import">导入备份 JSON</button>
+            <button class="btn danger" data-action="reset">重置为默认数据</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <input type="file" id="importInput" accept="application/json" hidden />
+
+  <script src="app.js"></script>
+</body>
+</html>
