@@ -23,11 +23,16 @@
     <nav class="nav" aria-label="主导航">
       <button class="nav-btn active" data-view="hall">接单大厅</button>
       <button class="nav-btn" data-view="order">顾客下单</button>
+      <button class="nav-btn" data-view="account">我的账户</button>
+      <button class="nav-btn" data-view="support">售后</button>
       <button class="nav-btn" data-view="board">排单看板</button>
       <button class="nav-btn" data-view="admin">管理模式</button>
     </nav>
 
-    <button class="lock-pill" id="lockPill" data-action="toggle-lock">未解锁</button>
+    <div class="top-actions">
+      <a class="qq-pill" id="headerQQ" href="https://wpa.qq.com/msgrd?v=3&uin=1930325223&site=qq&menu=yes" target="_blank" rel="noopener">客服 QQ 1930325223</a>
+      <button class="lock-pill" id="lockPill" data-action="toggle-lock">未解锁</button>
+    </div>
   </header>
 
   <main class="shell">
@@ -204,6 +209,102 @@
       </div>
     </section>
 
+    <!-- 我的账户 -->
+    <section id="view-account" class="view">
+      <div class="section-head">
+        <div>
+          <h2>我的账户</h2>
+          <p>注册后可查看本浏览器内的订单，并对订单发起售后</p>
+        </div>
+      </div>
+
+      <div id="accountGuest">
+        <div class="auth-grid">
+          <form id="registerForm" class="panel form-panel">
+            <h3>注册账户</h3>
+            <label class="field"><span>用户名 <em>*</em></span><input name="username" required minlength="3" maxlength="24" placeholder="至少 3 个字符" /></label>
+            <label class="field"><span>密码 <em>*</em></span><input name="password" type="password" required minlength="6" maxlength="60" placeholder="至少 6 位" /></label>
+            <label class="field"><span>确认密码 <em>*</em></span><input name="confirmPassword" type="password" required minlength="6" maxlength="60" /></label>
+            <p class="hint warn">静态站没有服务器，账户只保存在当前浏览器，请勿使用常用密码。</p>
+            <button class="btn primary wide" type="submit">注册并登录</button>
+          </form>
+          <form id="loginForm" class="panel form-panel">
+            <h3>登录账户</h3>
+            <label class="field"><span>用户名 <em>*</em></span><input name="username" required /></label>
+            <label class="field"><span>密码 <em>*</em></span><input name="password" type="password" required /></label>
+            <p class="hint">登录后可在“售后”中对本浏览器内的订单发起工单。</p>
+            <button class="btn ghost wide" type="submit">登录</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="accountPanel" hidden>
+        <div class="panel account-panel" id="accountInfo"></div>
+        <div class="section-head">
+          <div><h2>我的订单</h2><p>仅显示当前浏览器、当前账户提交的订单</p></div>
+          <button class="btn primary" data-action="go-support">申请售后</button>
+        </div>
+        <div id="myOrderList" class="order-list"></div>
+        <button class="btn ghost logout-btn" data-action="logout">退出登录</button>
+      </div>
+    </section>
+
+    <!-- 售后 -->
+    <section id="view-support" class="view">
+      <div class="section-head">
+        <div>
+          <h2>售后中心</h2>
+          <p>本人为唯一客服售后，其他联系方式均非官方</p>
+        </div>
+      </div>
+
+      <div class="panel support-contact">
+        <div>
+          <h3>唯一客服 / 售后 QQ</h3>
+          <p id="supportQQText"></p>
+        </div>
+        <div class="support-actions">
+          <a class="btn primary" id="supportQQ" href="https://wpa.qq.com/msgrd?v=3&uin=1930325223&site=qq&menu=yes" target="_blank" rel="noopener">发起 QQ 会话</a>
+          <button class="btn ghost" data-action="copy-qq">复制 QQ</button>
+        </div>
+        <p class="hint warn">静态版工单只保存在当前浏览器，店主在另一台设备看不到。紧急售后请直接 QQ 联系。</p>
+      </div>
+
+      <div id="supportGuest" class="lock-panel panel" hidden>
+        <div class="lock-icon">ID</div>
+        <h2>请先登录账户</h2>
+        <p>登录后即可关联本浏览器内的订单并提交售后工单。</p>
+        <button class="btn primary" data-action="go-account">去注册 / 登录</button>
+      </div>
+
+      <div id="supportContent">
+        <div class="order-layout">
+          <form id="supportForm" class="panel form-panel">
+            <h3>提交售后工单</h3>
+            <label class="field"><span>关联订单 <em>*</em></span><select id="supportOrderSelect" name="orderId" required></select></label>
+            <div class="grid-2">
+              <label class="field"><span>问题类型 <em>*</em></span><select name="type" required>
+                <option value="进度咨询">进度咨询</option>
+                <option value="账号问题">账号问题</option>
+                <option value="服务不符">服务不符</option>
+                <option value="退款协商">退款协商</option>
+                <option value="其他">其他</option>
+              </select></label>
+              <label class="field"><span>联系 QQ / 微信 <em>*</em></span><input name="contact" required maxlength="80" /></label>
+            </div>
+            <label class="field"><span>问题描述 <em>*</em></span><textarea name="description" rows="4" required maxlength="800" placeholder="请说明订单号、遇到的问题和期望处理方式"></textarea></label>
+            <button class="btn primary wide" type="submit">提交售后工单</button>
+          </form>
+          <aside>
+            <div class="panel">
+              <h3>我的售后工单</h3>
+              <div id="supportList" class="support-list"></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
     <!-- 排单看板 -->
     <section id="view-board" class="view">
       <div id="boardLocked" class="lock-panel panel" hidden>
@@ -270,6 +371,7 @@
               <label class="field"><span>每日可肝小时数</span><input name="hoursPerDay" type="number" min="0.5" max="24" step="0.5" required /></label>
               <label class="field"><span>开工时间</span><input name="workStart" type="time" required /></label>
             </div>
+            <label class="field"><span>唯一客服 QQ</span><input name="serviceQQ" required placeholder="1930325223" /></label>
             <label class="field"><span>管理模式密码</span><input name="password" minlength="4" required /></label>
             <button class="btn primary wide" type="submit">保存大厅设置</button>
           </form>
@@ -309,6 +411,11 @@
           </div>
         </div>
 
+        <div class="panel support-admin-panel">
+          <div class="form-head"><h3>售后工单</h3><span id="supportTicketCount" class="muted"></span></div>
+          <div id="supportAdminList" class="support-list"></div>
+        </div>
+
         <div class="panel data-panel">
           <h3>数据备份与恢复</h3>
           <p class="muted">数据只存在当前浏览器。换设备或清理缓存前，请先导出备份。</p>
@@ -321,6 +428,11 @@
       </div>
     </section>
   </main>
+
+  <div class="contact-fab">
+    <a id="fabQQ" href="https://wpa.qq.com/msgrd?v=3&uin=1930325223&site=qq&menu=yes" target="_blank" rel="noopener">唯一客服 QQ：1930325223</a>
+    <button data-action="copy-qq" aria-label="复制客服 QQ">复制</button>
+  </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <input type="file" id="importInput" accept="application/json" hidden />

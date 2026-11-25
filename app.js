@@ -10,6 +10,7 @@
     payment: '下单后请通过你填写的联系方式与我确认具体付款方式；建议先确认账号与需求，再完成付款。注意：静态版订单不会发送给店主，仅供本地演示。',
     hoursPerDay: 6,
     workStart: '19:00',
+    serviceQQ: '1930325223',
     password: '123456'
   };
 
@@ -120,7 +121,10 @@
     return {
       settings: clone(DEFAULT_SETTINGS),
       services: clone(DEFAULT_SERVICES),
-      orders: []
+      orders: [],
+      accounts: [],
+      afterSales: [],
+      session: null
     };
   }
 
@@ -147,10 +151,14 @@
         ? parsed.services.filter((service) => String(service.id || '').startsWith('svc-'))
         : [];
       const services = [...base.services, ...customServices];
+      if (!settings.serviceQQ) settings.serviceQQ = DEFAULT_SETTINGS.serviceQQ;
       return {
         settings,
         services,
-        orders: Array.isArray(parsed.orders) ? parsed.orders : []
+        orders: Array.isArray(parsed.orders) ? parsed.orders : [],
+        accounts: Array.isArray(parsed.accounts) ? parsed.accounts : [],
+        afterSales: Array.isArray(parsed.afterSales) ? parsed.afterSales : [],
+        session: parsed.session || null
       };
     } catch {
       return defaultState();
@@ -278,10 +286,282 @@
     }, 2600);
   }
 
+  function makeSalt() {
+    return Math.random().toString(36).slice(2, 10);
+  }
+
+  async function hashPassword(password, salt) {
+    const text = `${salt}:${password}`;
+    if (globalThis.crypto?.subtle?.digest) {
+      const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, '0')).join('');
+    }
+    let hash = 0;
+    for (let i = 0; i < text.length; i += 1) hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
+    return `fallback-${hash.toString(16)}`;
+  }
+
+  function getCurrentUser() {
+    const username = state.session?.username;
+    return state.accounts.find((account) => account.username === username) || null;
+  }
+
+  function getUserOrders() {
+    const user = getCurrentUser();
+    if (!user) return [];
+    return sortedOrders()
+      .map((order, index) => ({ ...order, queueNumber: index + 1 }))
+      .filter((order) => order.customerAccount === user.username);
+  }
+
+  function renderContactQQ() {
+    const qq = String(state.settings.serviceQQ || DEFAULT_SETTINGS.serviceQQ);
+    const url = `https://wpa.qq.com/msgrd?v=3&uin=${encodeURIComponent(qq)}&site=qq&menu=yes`;
+    const header = $('#headerQQ');
+    const supportLink = $('#supportQQ');
+    const supportText = $('#supportQQText');
+    const fab = $('#fabQQ');
+    if (header) { header.textContent = `客服 QQ ${qq}`; header.href = url; }
+    if (supportLink) { supportLink.textContent = `发起 QQ 会话：${qq}`; supportLink.href = url; }
+    if (supportText) supportText.textContent = `唯一客服 QQ：${qq}（本人亲自处理，不委托他人）`;
+    if (fab) { fab.textContent = `唯一客服 QQ：${qq}`; fab.href = url; }
+  }
+
+  function copyQQ() {
+    const qq = String(state.settings.serviceQQ || DEFAULT_SETTINGS.serviceQQ);
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(qq).then(() => showToast('客服 QQ 已复制', 'success')).catch(() => showToast(`客服 QQ：${qq}`));
+    } else {
+      showToast(`客服 QQ：${qq}`);
+    }
+  }
+
+  function renderAccount() {
+    const user = getCurrentUser();
+    $('#accountGuest').hidden = Boolean(user);
+    $('#accountPanel').hidden = !user;
+    if (!user) return;
+
+    $('#accountInfo').innerHTML = `
+      <h3>${esc(user.username)}</h3>
+      <p class="account-meta">注册时间：${esc(formatDateTime(user.createdAt))} ｜ 唯一客服 QQ：${esc(state.settings.serviceQQ)}</p>
+      <p class="hint warn">账户与订单只保存在当前浏览器，换设备或清理缓存后不会同步；售后请直接 QQ 联系。</p>
+    `;
+
+    const orders = getUserOrders();
+    const labels = { pending: '待排单', doing: '进行中', done: '已完成', cancelled: '已取消' };
+    $('#myOrderList').innerHTML = orders.length ? orders.map((order) => `
+      <article class="order-card">
+        <div class="order-head">
+          <div class="order-title">
+            <span class="queue-no">#${order.queueNumber}</span>
+            <div>
+              <h3>${esc(order.serviceName)}</h3>
+              <p>${esc(order.game)} · 下单于 ${esc(formatDateTime(order.createdAt))}</p>
+            </div>
+          </div>
+          <span class="status-badge status-${esc(order.status)}">${labels[order.status] || '待排单'}</span>
+        </div>
+        <div class="info-grid">
+          <div class="info-item"><span>公开报价</span><strong>${esc(formatPrice(order.price).text)}</strong></div>
+          <div class="info-item"><span>预计完成</span><strong>${esc(order.estimateEnd ? formatDateTime(order.estimateEnd) : '待排')}</strong></div>
+        </div>
+        <div class="order-actions">
+          <button class="mini-btn" data-action="support-order" data-id="${esc(order.id)}">对此订单申请售后</button>
+        </div>
+      </article>
+    `).join('') : '<div class="empty">当前账户还没有订单。</div>';
+  }
+
+  function renderSupport() {
+    const user = getCurrentUser();
+    $('#supportGuest').hidden = Boolean(user);
+    $('#supportContent').hidden = !user;
+    renderContactQQ();
+    if (!user) return;
+
+    const orders = getUserOrders();
+    const select = $('#supportOrderSelect');
+    const previous = select.value;
+    select.innerHTML = orders.length
+      ? orders.map((order) => `<option value="${esc(order.id)}">#${order.queueNumber} ${esc(order.serviceName)} · ${esc(formatDateTime(order.createdAt))}</option>`).join('')
+      : '<option value="">当前账户暂无订单</option>';
+    select.value = orders.some((order) => order.id === previous) ? previous : (orders[0]?.id || '');
+    select.disabled = !orders.length;
+
+    const contactInput = $('#supportForm').elements.contact;
+    if (!contactInput.value && orders[0]?.contact) contactInput.value = orders[0].contact;
+
+    const tickets = state.afterSales
+      .filter((ticket) => ticket.username === user.username)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const labels = { pending: '待处理', doing: '处理中', done: '已完成' };
+    $('#supportList').innerHTML = tickets.length ? tickets.map((ticket) => `
+      <div class="support-ticket">
+        <div class="support-ticket-head">
+          <div>
+            <strong>${esc(ticket.type)}</strong>
+            <div class="support-meta">${esc(ticket.serviceName)} · ${esc(formatDateTime(ticket.createdAt))}</div>
+          </div>
+          <span class="ticket-status ticket-${esc(ticket.status)}">${labels[ticket.status] || '待处理'}</span>
+        </div>
+        <div class="support-desc">${esc(ticket.description)}</div>
+        ${ticket.reply ? `<div class="support-reply">客服回复：${esc(ticket.reply)}</div>` : '<div class="support-meta">客服尚未回复，可直接在 QQ 中联系。</div>'}
+      </div>
+    `).join('') : '<div class="empty">当前账户还没有售后工单。</div>';
+  }
+
+  function renderSupportAdmin() {
+    const tickets = state.afterSales.slice().sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    $('#supportTicketCount').textContent = `共 ${tickets.length} 条`;
+    const labels = { pending: '待处理', doing: '处理中', done: '已完成' };
+    $('#supportAdminList').innerHTML = tickets.length ? tickets.map((ticket) => `
+      <div class="support-ticket">
+        <div class="support-ticket-head">
+          <div>
+            <strong>${esc(ticket.type)} · ${esc(ticket.username)}</strong>
+            <div class="support-meta">${esc(ticket.serviceName)} · ${esc(formatDateTime(ticket.createdAt))} · 联系：${esc(ticket.contact)}</div>
+          </div>
+          <span class="ticket-status ticket-${esc(ticket.status)}">${labels[ticket.status] || '待处理'}</span>
+        </div>
+        <div class="support-desc">${esc(ticket.description)}</div>
+        ${ticket.reply ? `<div class="support-reply">客服回复：${esc(ticket.reply)}</div>` : ''}
+        <div class="reply-box">
+          <textarea data-reply-id="${esc(ticket.id)}" rows="2" placeholder="输入客服回复">${esc(ticket.reply || '')}</textarea>
+        </div>
+        <div class="support-actions-row">
+          <button class="mini-btn" data-action="save-reply" data-id="${esc(ticket.id)}">保存回复</button>
+          <button class="mini-btn" data-action="support-status" data-id="${esc(ticket.id)}" data-status="pending">待处理</button>
+          <button class="mini-btn" data-action="support-status" data-id="${esc(ticket.id)}" data-status="doing">处理中</button>
+          <button class="mini-btn" data-action="support-status" data-id="${esc(ticket.id)}" data-status="done">已完成</button>
+        </div>
+      </div>
+    `).join('') : '<div class="empty">暂无售后工单。</div>';
+  }
+
+  async function registerUser(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const username = String(form.elements.username.value || '').trim();
+    const password = String(form.elements.password.value || '');
+    const confirmPassword = String(form.elements.confirmPassword.value || '');
+    if (password !== confirmPassword) {
+      showToast('两次输入的密码不一致', 'error');
+      return;
+    }
+    if (state.accounts.some((account) => account.username === username)) {
+      showToast('该用户名已注册', 'error');
+      return;
+    }
+    const salt = makeSalt();
+    const hash = await hashPassword(password, salt);
+    state.accounts.push({ id: makeId('user'), username, salt, hash, createdAt: new Date().toISOString() });
+    state.session = { username };
+    form.reset();
+    saveState();
+    renderAll();
+    showToast('注册成功，已自动登录', 'success');
+  }
+
+  async function loginUser(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const username = String(form.elements.username.value || '').trim();
+    const password = String(form.elements.password.value || '');
+    const account = state.accounts.find((item) => item.username === username);
+    if (!account) {
+      showToast('用户不存在', 'error');
+      return;
+    }
+    const hash = await hashPassword(password, account.salt);
+    if (hash !== account.hash) {
+      showToast('密码不正确', 'error');
+      return;
+    }
+    state.session = { username };
+    form.reset();
+    saveState();
+    renderAll();
+    showToast('登录成功', 'success');
+  }
+
+  function logoutUser() {
+    state.session = null;
+    saveState();
+    renderAll();
+    showToast('已退出登录');
+  }
+
+  function submitSupport(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const user = getCurrentUser();
+    if (!user) {
+      showToast('请先登录账户', 'error');
+      switchView('account');
+      return;
+    }
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const order = getUserOrders().find((item) => item.id === form.elements.orderId.value);
+    if (!order) {
+      showToast('请选择你的订单', 'error');
+      return;
+    }
+    const data = new FormData(form);
+    state.afterSales.push({
+      id: makeId('ticket'),
+      username: user.username,
+      orderId: order.id,
+      serviceName: order.serviceName,
+      type: String(data.get('type') || ''),
+      contact: String(data.get('contact') || '').trim(),
+      description: String(data.get('description') || '').trim(),
+      status: 'pending',
+      reply: '',
+      createdAt: new Date().toISOString()
+    });
+    form.elements.description.value = '';
+    saveState();
+    renderAll();
+    showToast('售后工单已提交，请同时 QQ 联系客服', 'success');
+  }
+
+  function saveSupportReply(id) {
+    const ticket = state.afterSales.find((item) => item.id === id);
+    if (!ticket) return;
+    const textarea = $$('textarea[data-reply-id]').find((element) => element.dataset.replyId === id);
+    ticket.reply = textarea ? textarea.value.trim() : ticket.reply;
+    saveState();
+    renderAll();
+    showToast('客服回复已保存', 'success');
+  }
+
+  function setSupportStatus(id, status) {
+    const ticket = state.afterSales.find((item) => item.id === id);
+    if (!ticket) return;
+    ticket.status = status;
+    saveState();
+    renderAll();
+    showToast('工单状态已更新', 'success');
+  }
+
   function switchView(view) {
     $$('.nav-btn').forEach((button) => button.classList.toggle('active', button.dataset.view === view));
     $$('.view').forEach((section) => section.classList.toggle('active', section.id === `view-${view}`));
     if (view === 'board') renderBoard();
+    if (view === 'account') renderAccount();
+    if (view === 'support') renderSupport();
     if (view === 'admin') renderAdmin();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -348,7 +628,7 @@
     select.value = selectedId;
     select.disabled = services.length === 0;
     $('button[type="submit"]', $('#orderForm')).disabled = services.length === 0;
-    $('#paymentInfo').textContent = state.settings.payment || DEFAULT_SETTINGS.payment;
+    $('#paymentInfo').textContent = `${state.settings.payment || DEFAULT_SETTINGS.payment}\n唯一客服 QQ：${state.settings.serviceQQ || DEFAULT_SETTINGS.serviceQQ}`;
     updateServicePreview();
   }
 
@@ -576,6 +856,7 @@
 
           <div class="info-grid">
             <div class="info-item"><span>顾客</span><strong>${esc(order.customerName)}</strong></div>
+            ${order.customerAccount ? `<div class="info-item"><span>账户</span><strong>${esc(order.customerAccount)}</strong></div>` : ''}
             <div class="info-item"><span>联系方式</span><strong>${esc(order.contactType)}：${esc(order.contact)}</strong></div>
             <div class="info-item"><span>付款方式</span><strong>${esc(order.paymentMethod || '待确认')}</strong></div>
             <div class="info-item"><span>可接受时间</span><strong>${esc(order.availableTime || '随时')}</strong></div>
@@ -623,6 +904,7 @@
     settingsForm.elements.payment.value = state.settings.payment || '';
     settingsForm.elements.hoursPerDay.value = state.settings.hoursPerDay;
     settingsForm.elements.workStart.value = state.settings.workStart;
+    settingsForm.elements.serviceQQ.value = state.settings.serviceQQ || DEFAULT_SETTINGS.serviceQQ;
     settingsForm.elements.password.value = state.settings.password;
 
     $('#serviceCount').textContent = `共 ${state.services.length} 项`;
@@ -645,13 +927,18 @@
         </div>
       `;
     }).join('') : '<div class="empty">还没有服务，先在上方创建一项吧。</div>';
+    renderSupportAdmin();
   }
 
   function renderAll() {
     renderHall();
     renderOrderForm();
+    renderAccount();
+    renderSupport();
     renderBoard();
     renderAdmin();
+    renderContactQQ();
+    if (unlocked) renderSupportAdmin();
   }
 
   function submitOrder(event) {
@@ -709,6 +996,7 @@
       addons: addonDetails.map((addon) => ({ id: addon.id, name: addon.name, price: addon.price, note: addon.note })),
       addonTotal,
       estimateHours: (Number(service.estimateHours) || 1) + commissionHours + addonHours,
+      customerAccount: getCurrentUser()?.username || '',
       customerName: String(data.get('customerName') || '').trim(),
       contactType: String(data.get('contactType') || ''),
       contact: String(data.get('contact') || '').trim(),
@@ -825,6 +1113,7 @@
       `加购小地图：${order.addons?.length ? order.addons.map((addon) => `${addon.name} ¥${addon.price}`).join('、') : '-'}`,
       `加购合计：¥${order.addonTotal || 0}`,
       `顾客：${order.customerName}`,
+      `账户：${order.customerAccount || '-'}`,
       `联系方式：${order.contactType} ${order.contact}`,
       `付款方式：${order.paymentMethod || '待确认'}`,
       `账号/UID：${order.accountUid}`,
@@ -871,6 +1160,7 @@
       payment: String(data.get('payment') || '').trim(),
       hoursPerDay: Math.max(0.5, Number(data.get('hoursPerDay')) || 6),
       workStart: String(data.get('workStart') || '19:00'),
+      serviceQQ: String(data.get('serviceQQ') || '').trim() || DEFAULT_SETTINGS.serviceQQ,
       password
     };
     recalculateSchedule();
@@ -998,7 +1288,10 @@
         state = {
           settings: { ...base.settings, ...(parsed.settings || {}) },
           services: parsed.services,
-          orders: parsed.orders
+          orders: parsed.orders,
+          accounts: Array.isArray(parsed.accounts) ? parsed.accounts : [],
+          afterSales: Array.isArray(parsed.afterSales) ? parsed.afterSales : [],
+          session: parsed.session || null
         };
         saveState();
         renderAll();
@@ -1051,6 +1344,28 @@
         break;
       case 'go-board':
         switchView('board');
+        break;
+      case 'go-account':
+        switchView('account');
+        break;
+      case 'go-support':
+        switchView('support');
+        break;
+      case 'support-order':
+        switchView('support');
+        $('#supportOrderSelect').value = id;
+        break;
+      case 'logout':
+        logoutUser();
+        break;
+      case 'copy-qq':
+        copyQQ();
+        break;
+      case 'save-reply':
+        saveSupportReply(id);
+        break;
+      case 'support-status':
+        setSupportStatus(id, button.dataset.status);
         break;
       case 'hall-filter':
         hallFilter = button.dataset.game || '全部';
@@ -1175,6 +1490,9 @@
       renderAddons(getService($('#serviceSelect').value)?.game || '');
     });
     $('#orderForm').addEventListener('submit', submitOrder);
+    $('#registerForm').addEventListener('submit', registerUser);
+    $('#loginForm').addEventListener('submit', loginUser);
+    $('#supportForm').addEventListener('submit', submitSupport);
     $('#settingsForm').addEventListener('submit', saveSettings);
     $('#serviceForm').addEventListener('submit', saveService);
     $('#cancelEditService').addEventListener('click', resetServiceForm);
