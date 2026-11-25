@@ -246,8 +246,18 @@
 
       <div id="accountPanel" hidden>
         <div class="panel account-panel" id="accountInfo"></div>
+        <div id="adminAccountTools" class="panel admin-tools" hidden>
+          <div>
+            <h3>管理账户工具</h3>
+            <p class="hint">你拥有查看全部排单的权限，可直接进入排单看板管理所有订单。</p>
+          </div>
+          <div class="admin-tools-actions">
+            <button class="btn primary" data-action="go-board">查看全部排单</button>
+            <button class="btn ghost" data-action="go-admin">管理模式</button>
+          </div>
+        </div>
         <div class="section-head">
-          <div><h2>我的订单</h2><p>仅显示当前浏览器、当前账户提交的订单</p></div>
+          <div><h2 id="myOrderTitle">我的订单</h2><p id="myOrderHint">仅显示当前浏览器、当前账户提交的订单</p></div>
           <button class="btn primary" data-action="go-support">申请售后</button>
         </div>
         <div id="myOrderList" class="order-list"></div>
@@ -380,6 +390,15 @@
             <label class="field"><span>唯一客服 QQ</span><input name="serviceQQ" required placeholder="1930325223" /></label>
             <label class="field"><span>管理模式密码</span><input name="password" minlength="4" required /></label>
             <button class="btn primary wide" type="submit">保存大厅设置</button>
+          </form>
+
+          <form id="adminAccountForm" class="panel form-panel">
+            <h3>管理账户（查看全部排单）</h3>
+            <p class="hint">该账户登录后自动拥有查看全部排单与管理模式的权限；用户名不能与已有账户重复。</p>
+            <label class="field"><span>管理账户用户名 <em>*</em></span><input name="username" required minlength="3" maxlength="24" placeholder="例如：店主" /></label>
+            <label class="field"><span>登录密码（留空则不修改）</span><input name="password" type="password" minlength="6" maxlength="60" placeholder="至少 6 位" /></label>
+            <label class="field"><span>确认新密码</span><input name="confirmPassword" type="password" minlength="6" maxlength="60" /></label>
+            <button class="btn primary wide" type="submit" id="adminAccountSubmitBtn">保存管理账户</button>
           </form>
 
           <div class="admin-stack">

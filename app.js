@@ -480,12 +480,27 @@
     return state.accounts.find((account) => account.username === username) || null;
   }
 
+  function isAdmin(user) {
+    return Boolean(user && user.role === 'admin');
+  }
+
+  async function ensureAdminAccount() {
+    if (!Array.isArray(state.accounts)) state.accounts = [];
+    const existing = state.accounts.find((account) => account.role === 'admin');
+    if (existing) return;
+    const username = '店主';
+    const password = String(state.settings.password || DEFAULT_SETTINGS.password);
+    const salt = makeSalt();
+    const hash = await hashPassword(password, salt);
+    state.accounts.push({ id: makeId('user'), username, salt, hash, role: 'admin', createdAt: new Date().toISOString() });
+    saveState();
+  }
+
   function getUserOrders() {
     const user = getCurrentUser();
     if (!user) return [];
-    return sortedOrders()
-      .map((order, index) => ({ ...order, queueNumber: index + 1 }))
-      .filter((order) => order.customerAccount === user.username);
+    const orders = sortedOrders().map((order, index) => ({ ...order, queueNumber: index + 1 }));
+    return isAdmin(user) ? orders : orders.filter((order) => order.customerAccount === user.username);
   }
 
   function renderContactQQ() {
@@ -516,8 +531,13 @@
     $('#accountPanel').hidden = !user;
     if (!user) return;
 
+    const admin = isAdmin(user);
+    $('#adminAccountTools').hidden = !admin;
+    $('#myOrderTitle').textContent = admin ? '全部订单（管理视角）' : '我的订单';
+    $('#myOrderHint').textContent = admin ? '管理账户可查看本浏览器内所有顾客的订单与排单' : '仅显示当前浏览器、当前账户提交的订单';
+
     $('#accountInfo').innerHTML = `
-      <h3>${esc(user.username)}</h3>
+      <h3>${esc(user.username)}${admin ? ' <span class="role-badge admin">管理账户</span>' : ''}</h3>
       <p class="account-meta">注册时间：${esc(formatDateTime(user.createdAt))} ｜ 唯一客服 QQ：${esc(state.settings.serviceQQ)}</p>
       <p class="hint warn">账户与订单只保存在当前浏览器，换设备或清理缓存后不会同步；售后请直接 QQ 联系。</p>
     `;
@@ -661,14 +681,17 @@
       return;
     }
     state.session = { username };
+    if (isAdmin(account)) unlocked = true;
     form.reset();
     saveState();
     renderAll();
-    showToast('登录成功', 'success');
+    showToast(isAdmin(account) ? '管理账户已登录，已解锁全部排单' : '登录成功', 'success');
   }
 
   function logoutUser() {
+    const user = getCurrentUser();
     state.session = null;
+    if (isAdmin(user)) unlocked = false;
     saveState();
     renderAll();
     showToast('已退出登录');
@@ -1283,6 +1306,14 @@
     settingsForm.elements.serviceQQ.value = state.settings.serviceQQ || DEFAULT_SETTINGS.serviceQQ;
     settingsForm.elements.password.value = state.settings.password;
 
+    const adminAccountForm = $('#adminAccountForm');
+    if (adminAccountForm) {
+      const adminAccount = state.accounts.find((account) => account.role === 'admin');
+      adminAccountForm.elements.username.value = adminAccount?.username || '';
+      adminAccountForm.elements.password.value = '';
+      adminAccountForm.elements.confirmPassword.value = '';
+    }
+
     $('#serviceCount').textContent = `共 ${state.services.length} 项`;
     $('#serviceAdminList').innerHTML = state.services.length ? state.services.map((service) => {
       const price = formatPrice(service.price);
@@ -1562,6 +1593,50 @@
     showToast('大厅设置已保存', 'success');
   }
 
+  async function saveAdminAccount(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const username = String(data.get('username') || '').trim();
+    const password = String(data.get('password') || '');
+    const confirmPassword = String(data.get('confirmPassword') || '');
+    if (!username) {
+      showToast('请输入管理账户用户名', 'error');
+      return;
+    }
+    const existing = state.accounts.find((account) => account.username === username);
+    const adminAccount = state.accounts.find((account) => account.role === 'admin');
+    if (existing && existing !== adminAccount) {
+      showToast('该用户名已被其他账户占用', 'error');
+      return;
+    }
+    if (password) {
+      if (password !== confirmPassword) {
+        showToast('两次输入的密码不一致', 'error');
+        return;
+      }
+      if (password.length < 6) {
+        showToast('密码至少需要 6 位', 'error');
+        return;
+      }
+    }
+    const oldUsername = adminAccount?.username;
+    if (adminAccount) {
+      adminAccount.username = username;
+      if (password) {
+        adminAccount.salt = makeSalt();
+        adminAccount.hash = await hashPassword(password, adminAccount.salt);
+      }
+    } else {
+      const salt = makeSalt();
+      state.accounts.push({ id: makeId('user'), username, salt, hash: await hashPassword(password || String(state.settings.password || DEFAULT_SETTINGS.password), salt), role: 'admin', createdAt: new Date().toISOString() });
+    }
+    if (state.session?.username === oldUsername) state.session.username = username;
+    saveState();
+    renderAll();
+    showToast('管理账户已保存', 'success');
+  }
+
   function saveService(event) {
     event.preventDefault();
     const form = event.currentTarget;
@@ -1674,7 +1749,7 @@
     const file = event.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = async () => {
       try {
         const parsed = JSON.parse(String(reader.result));
         if (!parsed || !Array.isArray(parsed.services) || !Array.isArray(parsed.orders)) {
@@ -1690,6 +1765,7 @@
           customAddons: Array.isArray(parsed.customAddons) ? parsed.customAddons : [],
           session: parsed.session || null
         };
+        await ensureAdminAccount();
         saveState();
         renderAll();
         showToast('备份已导入', 'success');
@@ -1701,11 +1777,12 @@
     reader.readAsText(file);
   }
 
-  function resetData() {
+  async function resetData() {
     if (!window.confirm('确认清空当前所有设置、服务和订单，并恢复默认数据？')) return;
     state = defaultState();
     unlocked = false;
     resetServiceForm();
+    await ensureAdminAccount();
     recalculateSchedule();
     saveState();
     renderAll();
@@ -1741,6 +1818,9 @@
         break;
       case 'go-board':
         switchView('board');
+        break;
+      case 'go-admin':
+        switchView('admin');
         break;
       case 'go-account':
         switchView('account');
@@ -1922,6 +2002,7 @@
     $('#loginForm').addEventListener('submit', loginUser);
     $('#supportForm').addEventListener('submit', submitSupport);
     $('#settingsForm').addEventListener('submit', saveSettings);
+    $('#adminAccountForm').addEventListener('submit', saveAdminAccount);
     $('#serviceForm').addEventListener('submit', saveService);
     $('#cancelEditService').addEventListener('click', resetServiceForm);
     $('#customAddonForm').addEventListener('submit', saveCustomAddon);
@@ -1949,7 +2030,8 @@
     });
   }
 
-  function init() {
+  async function init() {
+    await ensureAdminAccount();
     recalculateSchedule();
     bindEvents();
     renderAll();
