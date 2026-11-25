@@ -6,7 +6,7 @@
   const DEFAULT_SETTINGS = {
     title: '课余代肝 · 接单大厅',
     intro: '利用课余时间接单，主要覆盖原神、崩坏：星穹铁道的剧情推进、地图资源收集与每日委托，以及第五人格的日常活跃与加页手记。下单后按提交时间进入队列，进度可在排单看板查看。',
-    notice: '所有服务已标注公开参考价，计费单位写在价格旁，可在管理模式中自行修改。请下单前确认游戏账号可正常登录，付款方式以双方沟通为准。当前为静态演示版：订单只保存在你自己的浏览器里，店主暂时无法收到，请勿填写真实账号密码。',
+    notice: '所有服务已标注公开参考价，计费单位写在价格旁，可在管理模式中自行修改。大地图套餐已包含所属小地图，月托套餐已包含每日委托，不重复收费。请下单前确认游戏账号可正常登录，付款方式以双方沟通为准。当前为静态演示版：订单只保存在你自己的浏览器里，店主暂时无法收到，请勿填写真实账号密码。',
     payment: '下单后请通过你填写的联系方式与我确认具体付款方式；建议先确认账号与需求，再完成付款。注意：静态版订单不会发送给店主，仅供本地演示。',
     hoursPerDay: 6,
     workStart: '19:00',
@@ -14,19 +14,34 @@
   };
 
   const DEFAULT_SERVICES = [
-    { id: 'genshin-story', game: '原神', category: '剧情任务', name: '原神主线剧情推进', desc: '按章节推进主线剧情，含必要前置任务与过场流程。', price: '¥15 / 章', priceNote: '按章节计费，不含额外材料', estimateHours: 3, tag: '剧情', enabled: true },
-    { id: 'genshin-legend', game: '原神', category: '剧情任务', name: '传说 / 角色任务代肝', desc: '完成角色传说任务、邀约事件等剧情内容，可按角色指定。', price: '¥10 / 个', priceNote: '按单个任务计费', estimateHours: 2, tag: '剧情', enabled: true },
-    { id: 'genshin-world', game: '原神', category: '剧情任务', name: '世界任务清空', desc: '按区域清理世界任务与隐藏任务，适合探索度补完。', price: '¥20 / 区域', priceNote: '按区域计费', estimateHours: 4, tag: '探索', enabled: true },
-    { id: 'genshin-oculus', game: '原神', category: '地图资源', name: '地图资源收集 · 神瞳', desc: '按区域收集风神瞳、岩神瞳、草神瞳等，记录收集进度。', price: '¥20 / 区域', priceNote: '按区域计费', estimateHours: 4, tag: '收集', enabled: true },
-    { id: 'genshin-chest', game: '原神', category: '地图资源', name: '地图资源收集 · 宝箱与矿石', desc: '按区域清理宝箱、矿物、特产与圣遗物狗粮点。', price: '¥25 / 区域', priceNote: '按区域计费', estimateHours: 5, tag: '收集', enabled: true },
-    { id: 'genshin-daily', game: '原神', category: '每日委托', name: '原神每日委托代肝', desc: '完成每日四个委托与相关奖励，可按天或包周下单。', price: '¥3 / 天', priceNote: '按天计费，包周可优惠', estimateHours: 0.5, tag: '可包周', enabled: true },
-    { id: 'hsr-story', game: '崩坏：星穹铁道', category: '剧情任务', name: '星穹铁道主线 / 同行任务', desc: '推进开拓任务、同行任务与角色剧情，可按章节指定。', price: '¥15 / 章', priceNote: '按章节计费', estimateHours: 3, tag: '剧情', enabled: true },
-    { id: 'hsr-map', game: '崩坏：星穹铁道', category: '地图资源', name: '星穹铁道地图宝箱收集', desc: '按星球/区域清理宝箱、折纸小鸟、魔方与可交互收集物。', price: '¥25 / 星球', priceNote: '按星球区域计费', estimateHours: 4, tag: '收集', enabled: true },
-    { id: 'hsr-daily', game: '崩坏：星穹铁道', category: '每日委托', name: '星穹铁道每日委托代肝', desc: '完成每日实训、委托与活跃度奖励，可按天或包周下单。', price: '¥3 / 天', priceNote: '按天计费，包周可优惠', estimateHours: 0.5, tag: '可包周', enabled: true },
-    { id: 'hsr-sim', game: '崩坏：星穹铁道', category: '玩法代肝', name: '模拟宇宙 / 差分宇宙代肝', desc: '按次数完成模拟宇宙或差分宇宙，含奖励领取。', price: '¥10 / 次', priceNote: '按次计费', estimateHours: 2, tag: '玩法', enabled: true },
-    { id: 'idv-daily', game: '第五人格', category: '日常活跃', name: '第五人格日常活跃代肝', desc: '清理每日任务、周推理之径与活跃奖励，可按天或包周下单。', price: '¥3 / 天', priceNote: '按天计费，包周可优惠', estimateHours: 0.5, tag: '可包周', enabled: true },
-    { id: 'idv-notes', game: '第五人格', category: '手记代肝', name: '加页手记代肝', desc: '按页推进手记内容与相关任务，适合补页与赛季冲刺。', price: '¥12 / 页', priceNote: '按页计费', estimateHours: 2, tag: '手记', enabled: true },
-    { id: 'idv-rank', game: '第五人格', category: '日常活跃', name: '对战 / 排位活跃代肝', desc: '完成指定场次的匹配或排位，保持角色活跃度。', price: '¥8 / 10场', priceNote: '按 10 场计费', estimateHours: 1, tag: '对战', enabled: true }
+    { id: 'genshin-monthly', game: '原神', category: '日常托管', name: '原神月常委托（含每日委托）', desc: '按月托管每日委托、树脂与每周委托，避免每天重复下单。', price: '¥28 / 月', priceNote: '月付包含每日委托，无需另拍每日单', includes: '每日委托、树脂、每周委托', estimateHours: 1, tag: '含每日', enabled: true },
+    { id: 'genshin-daily', game: '原神', category: '日常委托', name: '原神每日委托单日', desc: '完成当日四个委托及相关奖励。', price: '¥3 / 天', priceNote: '按月委托更划算', includes: '当日四个委托与奖励', estimateHours: 0.5, tag: '单日', enabled: true },
+    { id: 'genshin-story-full', game: '原神', category: '剧情任务', name: '原神魔神任务全包', desc: '从序章推进至当前版本魔神任务。', price: '¥330 / 全包', priceNote: '单章 ¥15 起，按章节另拍', includes: '序章至当前版本全部魔神任务', estimateHours: 20, tag: '全包', enabled: true },
+    { id: 'genshin-story-chapter', game: '原神', category: '剧情任务', name: '原神魔神任务单章', desc: '按指定章节推进魔神任务剧情。', price: '¥15 / 章', priceNote: '部分长章节 ¥10-20', includes: '指定章节剧情与前置', estimateHours: 3, tag: '剧情', enabled: true },
+    { id: 'genshin-legend', game: '原神', category: '剧情任务', name: '原神传说任务', desc: '完成指定角色传说任务。', price: '¥20 / 个', priceNote: '长任务 ¥25-30', includes: '指定传说任务', estimateHours: 2, tag: '剧情', enabled: true },
+    { id: 'genshin-world', game: '原神', category: '剧情任务', name: '原神世界任务', desc: '按区域清理世界任务与隐藏任务。', price: '¥15 / 个', priceNote: '复杂任务 ¥25-35', includes: '指定世界任务', estimateHours: 2, tag: '探索', enabled: true },
+    { id: 'genshin-map', game: '原神', category: '地图探索', name: '原神大地图全收集（大图包小图）', desc: '按大地图打包探索，已包含该区域全部小地图，不重复收费。', price: '¥120 起 / 大图', priceNote: '蒙德120 璃月270 稻妻390 须弥670 枫丹420 纳塔400 挪德卡莱320 至冬200', includes: '大地图及所属小地图、宝箱、解密、成就、神瞳', estimateHours: 10, tag: '大图包', enabled: true },
+    { id: 'genshin-chest', game: '原神', category: '地图探索', name: '原神大地图全宝箱专项', desc: '只清指定大地图内全部宝箱，适合已满探账号。', price: '¥150 起 / 大图', priceNote: '蒙德150 璃月320 稻妻500 至冬230，其他区域私聊确认', includes: '指定大地图全部宝箱（含小地图）', estimateHours: 6, tag: '宝箱', enabled: true },
+    { id: 'hsr-daily-normal', game: '崩坏：星穹铁道', category: '日常托管', name: '星穹铁道普通日常托管（含每日委托）', desc: '基础月托，每日委托已包含在内。', price: '¥28 / 月', priceNote: '月付包含每日委托，无需另拍每日单', includes: '每日委托、体力、日常实训', estimateHours: 1, tag: '含每日', enabled: true },
+    { id: 'hsr-daily-advanced', game: '崩坏：星穹铁道', category: '日常托管', name: '星穹铁道高级日常托管', desc: '在普通托管基础上增加周常玩法。', price: '¥38 / 月', priceNote: '按月计费', includes: '普通日常托管 + 差分宇宙 / 货币战（周积分）', estimateHours: 2, tag: '进阶', enabled: true },
+    { id: 'hsr-daily-half', game: '崩坏：星穹铁道', category: '日常托管', name: '星穹铁道半托日常托管', desc: '适合活动较多时托管。', price: '¥68 / 月', priceNote: '按月计费', includes: '高级日常托管 + 大小活动', estimateHours: 3, tag: '半托', enabled: true },
+    { id: 'hsr-daily-full', game: '崩坏：星穹铁道', category: '日常托管', name: '星穹铁道全托日常托管', desc: '尽可能覆盖全部日常与深渊。', price: '¥98 / 月', priceNote: '按月计费', includes: '半托日常托管 + 深渊（尽量打）', estimateHours: 5, tag: '全托', enabled: true },
+    { id: 'hsr-story-full', game: '崩坏：星穹铁道', category: '剧情任务', name: '星穹铁道主线区域全包', desc: '按区域打包推进开拓任务。', price: '¥28 起 / 区域', priceNote: '雅利洛VI 28 仙舟罗浮45 匹诺康尼90 二相乐园/千星城120', includes: '指定区域全部主线剧情', estimateHours: 8, tag: '全包', enabled: true },
+    { id: 'hsr-side', game: '崩坏：星穹铁道', category: '剧情任务', name: '星穹铁道开拓续闻 / 同行任务', desc: '推进指定续闻或同行任务。', price: '¥8 / 个', priceNote: '部分任务 ¥10-15 / 个', includes: '指定续闻或同行任务', estimateHours: 1.5, tag: '剧情', enabled: true },
+    { id: 'hsr-events', game: '崩坏：星穹铁道', category: '玩法代肝', name: '星穹铁道常驻活动代肝', desc: '按项完成常驻活动内容，不含剧情。', price: '¥12 / 项', priceNote: '按活动项计费', includes: '指定常驻活动（不含剧情）', estimateHours: 1.5, tag: '活动', enabled: true },
+    { id: 'hsr-map', game: '崩坏：星穹铁道', category: '地图探索', name: '星穹铁道大地图全收集（大图包小图）', desc: '按星球大地图打包，已包含所属小地图与区域内容。', price: '¥15 起 / 大图', priceNote: '空间站15 雅利洛VI30 仙舟罗浮120 匹诺康尼420 翁法罗斯190 二相乐园150', includes: '宝箱、折纸小鸟、解密、成就及小地图', estimateHours: 8, tag: '大图包', enabled: true },
+    { id: 'hsr-pulls', game: '崩坏：星穹铁道', category: '玩法代肝', name: '星穹铁道地图抽数代刷', desc: '按抽数完成地图抽卡类收集内容。', price: '¥1.8 / 抽', priceNote: '低探1.8 / 中探2.5 / 高探3.2 每抽', includes: '指定地图抽数', estimateHours: 1, tag: '抽数', enabled: true },
+    { id: 'idv-weekly', game: '第五人格', category: '周常任务', name: '第五人格周上限', desc: '完成每周上限任务。', price: '¥20 / 周', priceNote: '单周 1w ¥5；包月 ¥80', includes: '每周上限任务', estimateHours: 2, tag: '周常', enabled: true },
+    { id: 'idv-weekly-month', game: '第五人格', category: '周常任务', name: '第五人格周上限包月', desc: '整月周上限任务打包。', price: '¥80 / 月', priceNote: '按月计费', includes: '整月周上限任务', estimateHours: 8, tag: '包月', enabled: true },
+    { id: 'idv-checkin', game: '第五人格', category: '日常委托', name: '第五人格每日签到', desc: '按周完成每日签到。', price: '¥3.5 / 周', priceNote: '按周计费', includes: '每日签到', estimateHours: 0.5, tag: '日常', enabled: true },
+    { id: 'idv-first-win', game: '第五人格', category: '日常委托', name: '第五人格每日首胜', desc: '完成当日首胜任务。', price: '¥2 / 天', priceNote: '按天计费', includes: '每日首胜', estimateHours: 0.3, tag: '日常', enabled: true },
+    { id: 'idv-rank-low', game: '第五人格', category: '日常委托', name: '第五人格排位低保', desc: '完成每日排位低保。', price: '¥2 / 天', priceNote: '按天计费', includes: '排位低保', estimateHours: 0.5, tag: '日常', enabled: true },
+    { id: 'idv-small-trust', game: '第五人格', category: '日常托管', name: '第五人格小托管（含日常）', desc: '基础托管套餐，已包含签到、周上限与排位低保。', price: '¥140 / 月', priceNote: '周付 ¥35 / 周', includes: '每日签到、周上限、排位低保', estimateHours: 3, tag: '含日常', enabled: true },
+    { id: 'idv-big-trust', game: '第五人格', category: '日常托管', name: '第五人格大托管（含小托管）', desc: '完整托管套餐，包含小托管全部内容。', price: '¥170 / 月', priceNote: '周付 ¥45 / 周', includes: '小托管、五排低保、角色日、每日商城、协会事务', estimateHours: 5, tag: '全托', enabled: true },
+    { id: 'idv-notes', game: '第五人格', category: '加页手记', name: '第五人格加页手记主线全包', desc: '按主线打包完成加页手记。', price: '¥35 起 / 全包', priceNote: '曙光症35 厄运一40 厄运二30；单任务 ¥1-6', includes: '对应主线全部任务', estimateHours: 6, tag: '全包', enabled: true },
+    { id: 'idv-rank-sprint', game: '第五人格', category: '段位速刷', name: '第五人格段位速刷', desc: '按星级速刷段位。', price: '¥1-7 / 星', priceNote: '1阶4 2阶2 3阶3 4阶1 5阶6 6阶以上7', includes: '指定段位星级', estimateHours: 2, tag: '段位', enabled: true },
+    { id: 'idv-relic', game: '第五人格', category: '加页手记', name: '第五人格遗迹积分代肝', desc: '按积分档位完成遗迹任务。', price: '¥6 / 100w', priceNote: '500w ¥30；1000w ¥55', includes: '指定遗迹积分档位', estimateHours: 2, tag: '积分', enabled: true },
+    { id: 'idv-feather', game: '第五人格', category: '加页手记', name: '第五人格羽毛添页', desc: '按页完成羽毛添页内容。', price: '¥0.3 / 页', priceNote: '添页 ¥0.35 / 页', includes: '羽毛 / 添页指定页数', estimateHours: 0.5, tag: '添页', enabled: true }
   ];
 
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -61,14 +76,13 @@
       if (!String(settings.notice || '').includes('公开参考价')) {
         settings.notice = `${settings.notice || ''} 所有服务已标注公开参考价，可在管理模式自行修改。`.trim();
       }
-      const services = Array.isArray(parsed.services)
-        ? parsed.services.map((service) => {
-            const preset = base.services.find((item) => item.id === service.id);
-            const price = String(service.price || '').trim() ? service.price : (preset?.price || '');
-            const priceNote = String(service.priceNote || '').trim() ? service.priceNote : (preset?.priceNote || '');
-            return { ...service, price, priceNote };
-          })
-        : base.services;
+      if (!String(settings.notice || '').includes('大地图套餐')) {
+        settings.notice = `${settings.notice || ''} 大地图套餐已包含所属小地图，月托套餐已包含每日委托，不重复收费。`.trim();
+      }
+      const customServices = Array.isArray(parsed.services)
+        ? parsed.services.filter((service) => String(service.id || '').startsWith('svc-'))
+        : [];
+      const services = [...base.services, ...customServices];
       return {
         settings,
         services,
@@ -227,7 +241,7 @@
     const keyword = ($('#hallSearch').value || '').trim().toLowerCase();
     const visible = services.filter((service) => {
       const matchGame = hallFilter === '全部' || (service.game || '其他') === hallFilter;
-      const text = `${service.name} ${service.desc} ${service.category} ${service.tag} ${service.price || ''} ${service.priceNote || ''}`.toLowerCase();
+      const text = `${service.name} ${service.desc} ${service.category} ${service.tag} ${service.price || ''} ${service.priceNote || ''} ${service.includes || ''}`.toLowerCase();
       return matchGame && (!keyword || text.includes(keyword));
     });
 
@@ -247,6 +261,7 @@
             <span class="price ${price.soft ? 'soft' : ''}">${esc(price.text)}</span>
             ${service.priceNote ? `<span class="price-note">${esc(service.priceNote)}</span>` : ''}
           </div>
+          ${service.includes ? `<p class="include-line"><span>包含</span>${esc(service.includes)}</p>` : ''}
           <p class="estimate">分类：${esc(service.category || '其他')} · 预计 ${Number(service.estimateHours) || 1} 小时</p>
           <div class="card-meta">
             <button class="card-action" data-action="service-order" data-id="${esc(service.id)}">按此价格下单</button>
@@ -294,6 +309,7 @@
       <div class="summary-row"><span>分类</span><strong>${esc(service.category || '其他')}</strong></div>
       <div class="summary-row"><span>公开报价</span><strong class="summary-price">${esc(price.text)}</strong></div>
       ${service.priceNote ? `<div class="summary-row"><span>价格说明</span><strong>${esc(service.priceNote)}</strong></div>` : ''}
+      ${service.includes ? `<div class="summary-row"><span>包含内容</span><strong>${esc(service.includes)}</strong></div>` : ''}
       <div class="summary-row"><span>预计耗时</span><strong>${Number(service.estimateHours) || 1} 小时</strong></div>
     `;
   }
@@ -371,6 +387,7 @@
             <div class="info-item"><span>预计完成</span><strong>${esc(order.estimateEnd ? formatDateTime(order.estimateEnd) : '待排')}</strong></div>
             <div class="info-item"><span>公开报价</span><strong>${esc(formatPrice(order.price).text)}</strong></div>
             ${order.priceNote ? `<div class="info-item"><span>价格说明</span><strong>${esc(order.priceNote)}</strong></div>` : ''}
+            ${order.includes ? `<div class="info-item"><span>包含内容</span><strong>${esc(order.includes)}</strong></div>` : ''}
           </div>
 
           ${noteParts.length ? `<div class="order-note">备注：${noteParts.map(esc).join(' ｜ ')}</div>` : ''}
@@ -415,7 +432,7 @@
           <div class="admin-item-head">
             <div>
               <strong>${esc(service.name)}</strong>
-              <div class="admin-meta">${esc(service.game)} / ${esc(service.category || '其他')} · ${esc(price.text)}${service.priceNote ? `（${esc(service.priceNote)}）` : ''} · ${Number(service.estimateHours) || 1} 小时${service.enabled === false ? ' · 已隐藏' : ''}</div>
+              <div class="admin-meta">${esc(service.game)} / ${esc(service.category || '其他')} · ${esc(price.text)}${service.priceNote ? `（${esc(service.priceNote)}）` : ''}${service.includes ? ` · 含：${esc(service.includes)}` : ''} · ${Number(service.estimateHours) || 1} 小时${service.enabled === false ? ' · 已隐藏' : ''}</div>
             </div>
             <span class="game-badge" style="--game-color:${gameColor(service.game)}">${esc(service.game)}</span>
           </div>
@@ -461,6 +478,7 @@
       category: service.category,
       price: service.price,
       priceNote: service.priceNote || '',
+      includes: service.includes || '',
       estimateHours: Number(service.estimateHours) || 1,
       customerName: String(data.get('customerName') || '').trim(),
       contactType: String(data.get('contactType') || ''),
@@ -492,6 +510,7 @@
       <div class="queue-big">第 ${queueNumber} 位</div>
       <div class="summary-row"><span>公开报价</span><strong class="summary-price">${esc(formatPrice(order.price).text)}</strong></div>
       ${order.priceNote ? `<div class="summary-row"><span>价格说明</span><strong>${esc(order.priceNote)}</strong></div>` : ''}
+      ${order.includes ? `<div class="summary-row"><span>包含内容</span><strong>${esc(order.includes)}</strong></div>` : ''}
       <p class="muted">已按下单时间进入队列，预计开工：${esc(order.estimateStart ? formatDateTime(order.estimateStart) : '待排')}</p>
     `;
     form.reset();
@@ -567,6 +586,7 @@
       `服务：${order.game} / ${order.serviceName}`,
       `公开报价：${formatPrice(order.price).text}`,
       `价格说明：${order.priceNote || '-'}`,
+      `包含内容：${order.includes || '-'}`,
       `顾客：${order.customerName}`,
       `联系方式：${order.contactType} ${order.contact}`,
       `付款方式：${order.paymentMethod || '待确认'}`,
@@ -633,6 +653,7 @@
       desc: String(data.get('desc') || '').trim(),
       price: String(data.get('price') || '').trim(),
       priceNote: String(data.get('priceNote') || '').trim(),
+      includes: String(data.get('includes') || '').trim(),
       estimateHours: Math.max(0.5, Number(data.get('estimateHours')) || 1),
       tag: String(data.get('tag') || '').trim(),
       enabled: data.has('enabled')
@@ -669,6 +690,7 @@
     form.elements.desc.value = service.desc || '';
     form.elements.price.value = service.price || '';
     form.elements.priceNote.value = service.priceNote || '';
+    form.elements.namedItem('includes').value = service.includes || '';
     form.elements.estimateHours.value = service.estimateHours || 1;
     form.elements.tag.value = service.tag || '';
     form.elements.enabled.checked = service.enabled !== false;

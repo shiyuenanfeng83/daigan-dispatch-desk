@@ -257,6 +257,16 @@ body {
 .price { color: var(--gold); font-size: 17px; font-weight: 800; }
 .price.soft { color: var(--muted); font-size: 13px; font-weight: 500; }
 .price-note { color: var(--muted); font-size: 11px; width: 100%; }
+.include-line { margin: 10px 0 0; font-size: 12px; color: #c8f6f4; line-height: 1.5; }
+.include-line span {
+  display: inline-block;
+  margin-right: 7px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(61, 218, 215, 0.16);
+  color: var(--cyan);
+  font-size: 10px;
+}
 .card-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; }
 .card-meta .card-action { width: 100%; text-align: center; }
 .card-action {
