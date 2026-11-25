@@ -418,6 +418,38 @@
           </div>
         </div>
 
+        <div class="panel custom-addon-panel">
+          <div class="form-head">
+            <h3 id="customAddonFormTitle">添加自定义加购项</h3>
+            <button type="button" class="text-btn" id="cancelEditCustomAddon" hidden>取消编辑</button>
+          </div>
+          <p class="hint">在这里自行添加小型加购内容。选择所属加购箱与游戏后，添加的项目会出现在下单页对应加购箱中，可勾选并自动累计计费。全包项与同组小项互斥，避免重复收费。</p>
+          <form id="customAddonForm" class="form-panel inner-form">
+            <div class="grid-2">
+              <label class="field"><span>加购位置 <em>*</em></span>
+                <select name="type" required>
+                  <option value="task">任务加购箱</option>
+                  <option value="map">小地图加购</option>
+                  <option value="commission">可勾选委托</option>
+                </select>
+              </label>
+              <label class="field"><span>游戏 <em>*</em></span><input name="game" list="gameOptions" required placeholder="例如：崩坏：星穹铁道" /></label>
+              <label class="field"><span>分组名称</span><input name="group" placeholder="例如：功能小项 / 额外服务" /></label>
+              <label class="field"><span>子分组（可选）</span><input name="subgroup" placeholder="例如：限时活动" /></label>
+              <label class="field span-2"><span>项目名称 <em>*</em></span><input name="name" required placeholder="例如：每日体力清理" /></label>
+              <label class="field"><span>价格（元）<em>*</em></span><input name="price" type="number" min="0" step="0.5" required placeholder="例如：20" /></label>
+              <label class="field"><span>预计耗时（小时）</span><input name="hours" type="number" min="0" step="0.5" value="0.5" /></label>
+              <label class="field span-2"><span>备注</span><input name="note" placeholder="例如：按次计费，不含材料" /></label>
+              <label class="field"><span>计费单位（委托用）</span><input name="unit" value="次" placeholder="次 / 天 / 月" /></label>
+              <label class="field check-field"><span>设为全包（与同组小项互斥）</span><input name="kindFull" type="checkbox" /></label>
+              <label class="field check-field"><span>在下单页展示</span><input name="enabled" type="checkbox" checked /></label>
+            </div>
+            <button class="btn primary wide" type="submit" id="customAddonSubmitBtn">添加加购项</button>
+          </form>
+          <div class="form-head"><h3>自定义加购项列表</h3><span id="customAddonCount" class="muted"></span></div>
+          <div id="customAddonAdminList" class="admin-list"></div>
+        </div>
+
         <div class="panel support-admin-panel">
           <div class="form-head"><h3>售后工单</h3><span id="supportTicketCount" class="muted"></span></div>
           <div id="supportAdminList" class="support-list"></div>

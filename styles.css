@@ -552,6 +552,10 @@ body {
 .ticket-doing { color: #c9c1ff; border-color: rgba(123, 108, 255, 0.4); background: rgba(123, 108, 255, 0.1); }
 .ticket-done { color: #a7f3c7; border-color: rgba(74, 222, 128, 0.4); background: rgba(74, 222, 128, 0.08); }
 .support-admin-panel { margin-top: 18px; padding: 24px; }
+.custom-addon-panel { margin-top: 18px; padding: 24px; }
+.custom-addon-panel .inner-form { padding: 0; margin: 16px 0 24px; background: none; border: 0; }
+.custom-addon-panel .inner-form .field { min-width: 0; }
+.custom-addon-panel .form-head + .hint { margin-top: 6px; }
 
 @media (max-width: 900px) {
   .topbar { flex-wrap: wrap; gap: 12px; }

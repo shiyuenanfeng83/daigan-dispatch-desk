@@ -198,6 +198,7 @@
   let state = loadState();
   let unlocked = false;
   let editingServiceId = null;
+  let editingCustomAddonId = null;
   let hallFilter = '全部';
   let boardFilter = '全部';
   let selectedAddons = new Set();
@@ -216,8 +217,25 @@
       orders: [],
       accounts: [],
       afterSales: [],
+      customAddons: [],
       session: null
     };
+  }
+
+  function customAddonsOfType(type) {
+    return (state.customAddons || []).filter((item) => item.type === type && item.enabled !== false);
+  }
+
+  function getTaskAddons() {
+    return [...TASK_ADDONS, ...customAddonsOfType('task')];
+  }
+
+  function getMapAddons() {
+    return [...MAP_ADDONS, ...customAddonsOfType('map')];
+  }
+
+  function getCommissionAddons() {
+    return [...COMMISSION_ADDONS, ...customAddonsOfType('commission')];
   }
 
   function loadState() {
@@ -250,6 +268,7 @@
         orders: Array.isArray(parsed.orders) ? parsed.orders : [],
         accounts: Array.isArray(parsed.accounts) ? parsed.accounts : [],
         afterSales: Array.isArray(parsed.afterSales) ? parsed.afterSales : [],
+        customAddons: Array.isArray(parsed.customAddons) ? parsed.customAddons : [],
         session: parsed.session || null
       };
     } catch {
@@ -725,7 +744,7 @@
   }
 
   function getSelectedTaskAddonDetails() {
-    return TASK_ADDONS.filter((item) => selectedTaskAddons.has(item.id));
+    return getTaskAddons().filter((item) => selectedTaskAddons.has(item.id));
   }
 
   function updateTaskAddonTotal() {
@@ -749,7 +768,7 @@
     const list = $('#taskAddonList');
     if (!section || !list) return;
 
-    const options = TASK_ADDONS.filter((item) => item.game === game);
+    const options = getTaskAddons().filter((item) => item.game === game);
     selectedTaskAddons = new Set([...selectedTaskAddons].filter((id) => options.some((item) => item.id === id)));
 
     if (!options.length) {
@@ -787,7 +806,7 @@
   }
 
   function getSelectedCommissionDetails() {
-    return COMMISSION_ADDONS.filter((item) => selectedCommissions.has(item.id));
+    return getCommissionAddons().filter((item) => selectedCommissions.has(item.id));
   }
 
   function updateCommissionTotal() {
@@ -811,7 +830,7 @@
     const list = $('#commissionList');
     if (!section || !list) return;
 
-    const options = COMMISSION_ADDONS.filter((item) => item.game === game);
+    const options = getCommissionAddons().filter((item) => item.game === game);
     selectedCommissions = new Set([...selectedCommissions].filter((id) => options.some((item) => item.id === id)));
 
     if (!options.length) {
@@ -841,7 +860,7 @@
   }
 
   function getSelectedAddonDetails() {
-    return MAP_ADDONS.filter((addon) => selectedAddons.has(addon.id));
+    return getMapAddons().filter((addon) => selectedAddons.has(addon.id));
   }
 
   function updateAddonTotal() {
@@ -865,7 +884,7 @@
     const list = $('#addonList');
     if (!section || !list) return;
 
-    const options = MAP_ADDONS.filter((addon) => addon.game === game);
+    const options = getMapAddons().filter((addon) => addon.game === game);
     selectedAddons = new Set([...selectedAddons].filter((id) => options.some((addon) => addon.id === id)));
 
     if (!options.length) {
@@ -934,21 +953,21 @@
       <div class="summary-row"><span>预计耗时</span><strong>${Number(service.estimateHours) || 1} 小时</strong></div>
     `;
 
-    if (service.allowCommissionPricing) renderCommissions(service.game);
+    if (service.allowCommissionPricing || getCommissionAddons().some((item) => item.game === service.game)) renderCommissions(service.game);
     else {
       $('#commissionSection').hidden = true;
       selectedCommissions.clear();
       updateCommissionTotal();
     }
 
-    if (service.allowAddonPricing) renderAddons(service.game);
+    if (service.allowAddonPricing || getMapAddons().some((item) => item.game === service.game)) renderAddons(service.game);
     else {
       $('#addonSection').hidden = true;
       selectedAddons.clear();
       updateAddonTotal();
     }
 
-    if (service.game === '崩坏：星穹铁道') renderTaskAddons(service.game);
+    if (getTaskAddons().some((item) => item.game === service.game)) renderTaskAddons(service.game);
     else {
       $('#taskAddonSection').hidden = true;
       selectedTaskAddons.clear();
@@ -1054,6 +1073,136 @@
     }).join('');
   }
 
+  const CUSTOM_ADDON_TYPE_LABELS = {
+    task: '任务加购箱',
+    map: '小地图加购',
+    commission: '可勾选委托'
+  };
+
+  function renderCustomAddonAdmin() {
+    const list = $('#customAddonAdminList');
+    if (!list) return;
+    const items = state.customAddons || [];
+    $('#customAddonCount').textContent = `共 ${items.length} 项`;
+    if (!items.length) {
+      list.innerHTML = '<div class="empty">还没有自定义加购项，在上方添加后即可在下单页对应加购箱勾选。</div>';
+      return;
+    }
+    list.innerHTML = items.map((item) => `
+      <div class="admin-item ${item.enabled === false ? 'disabled' : ''}">
+        <div class="admin-item-head">
+          <div>
+            <strong>${esc(item.name)}</strong>
+            <div class="admin-meta">${esc(item.game)} / ${esc(CUSTOM_ADDON_TYPE_LABELS[item.type] || item.type)} · ¥${item.price}${item.unit ? ` / ${esc(item.unit)}` : ''}${item.group ? ` · 分组：${esc(item.group)}` : ''}${item.subgroup ? ` · 子分组：${esc(item.subgroup)}` : ''}${item.kind === 'full' ? ' · 全包互斥' : ''}${item.note ? ` · ${esc(item.note)}` : ''}${item.enabled === false ? ' · 已隐藏' : ''}</div>
+          </div>
+          <span class="game-badge" style="--game-color:${gameColor(item.game)}">${esc(item.game)}</span>
+        </div>
+        <div class="admin-actions">
+          <button class="mini-btn" data-action="edit-custom-addon" data-id="${esc(item.id)}">编辑</button>
+          <button class="mini-btn" data-action="toggle-custom-addon" data-id="${esc(item.id)}">${item.enabled === false ? '重新展示' : '暂时隐藏'}</button>
+          <button class="mini-btn danger" data-action="delete-custom-addon" data-id="${esc(item.id)}">删除</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function resetCustomAddonForm() {
+    editingCustomAddonId = null;
+    const form = $('#customAddonForm');
+    if (!form) return;
+    form.reset();
+    form.elements.type.value = 'task';
+    form.elements.hours.value = '0.5';
+    form.elements.unit.value = '次';
+    form.elements.enabled.checked = true;
+    $('#customAddonFormTitle').textContent = '添加自定义加购项';
+    $('#customAddonSubmitBtn').textContent = '添加加购项';
+    $('#cancelEditCustomAddon').hidden = true;
+  }
+
+  function saveCustomAddon(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const price = Number(data.get('price'));
+    if (!Number.isFinite(price) || price < 0) {
+      showToast('请填写有效的价格', 'error');
+      return;
+    }
+    const payload = {
+      type: String(data.get('type') || 'task'),
+      game: String(data.get('game') || '').trim(),
+      group: String(data.get('group') || '').trim() || '自定义加购',
+      subgroup: String(data.get('subgroup') || '').trim(),
+      name: String(data.get('name') || '').trim(),
+      price,
+      hours: Math.max(0, Number(data.get('hours')) || 0),
+      note: String(data.get('note') || '').trim(),
+      unit: String(data.get('unit') || '').trim(),
+      kind: data.has('kindFull') ? 'full' : '',
+      enabled: data.has('enabled')
+    };
+    if (!payload.game || !payload.name) {
+      showToast('游戏和项目名称为必填项', 'error');
+      return;
+    }
+    if (!state.customAddons) state.customAddons = [];
+    if (editingCustomAddonId) {
+      const index = state.customAddons.findIndex((item) => item.id === editingCustomAddonId);
+      if (index >= 0) {
+        state.customAddons[index] = { ...state.customAddons[index], ...payload };
+        showToast('加购项已更新', 'success');
+      }
+    } else {
+      state.customAddons.push({ id: makeId('ca'), ...payload });
+      showToast('加购项已添加', 'success');
+    }
+    resetCustomAddonForm();
+    saveState();
+    renderAll();
+  }
+
+  function editCustomAddon(id) {
+    const item = (state.customAddons || []).find((entry) => entry.id === id);
+    if (!item) return;
+    editingCustomAddonId = id;
+    const form = $('#customAddonForm');
+    form.elements.type.value = item.type || 'task';
+    form.elements.game.value = item.game || '';
+    form.elements.group.value = item.group || '';
+    form.elements.subgroup.value = item.subgroup || '';
+    form.elements.name.value = item.name || '';
+    form.elements.price.value = item.price;
+    form.elements.hours.value = item.hours;
+    form.elements.note.value = item.note || '';
+    form.elements.unit.value = item.unit || '次';
+    form.elements.kindFull.checked = item.kind === 'full';
+    form.elements.enabled.checked = item.enabled !== false;
+    $('#customAddonFormTitle').textContent = '编辑自定义加购项';
+    $('#customAddonSubmitBtn').textContent = '保存修改';
+    $('#cancelEditCustomAddon').hidden = false;
+    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function deleteCustomAddon(id) {
+    const item = (state.customAddons || []).find((entry) => entry.id === id);
+    if (!item || !window.confirm(`确认删除加购项「${item.name}」？已有订单不会受影响。`)) return;
+    state.customAddons = state.customAddons.filter((entry) => entry.id !== id);
+    if (editingCustomAddonId === id) resetCustomAddonForm();
+    saveState();
+    renderAll();
+    showToast('加购项已删除');
+  }
+
+  function toggleCustomAddon(id) {
+    const item = (state.customAddons || []).find((entry) => entry.id === id);
+    if (!item) return;
+    item.enabled = item.enabled === false;
+    saveState();
+    renderAll();
+    showToast(item.enabled ? '加购项已重新展示' : '加购项已暂时隐藏');
+  }
+
   function renderAdmin() {
     $('#adminLocked').hidden = unlocked;
     $('#adminContent').hidden = !unlocked;
@@ -1091,6 +1240,7 @@
         </div>
       `;
     }).join('') : '<div class="empty">还没有服务，先在上方创建一项吧。</div>';
+    renderCustomAddonAdmin();
     renderSupportAdmin();
   }
 
@@ -1120,13 +1270,13 @@
       return;
     }
 
-    const commissionDetails = service.allowCommissionPricing ? getSelectedCommissionDetails() : [];
+    const commissionDetails = getSelectedCommissionDetails();
     const commissionTotal = commissionDetails.reduce((sum, item) => sum + item.price, 0);
     const commissionHours = commissionDetails.reduce((sum, item) => sum + item.hours, 0);
-    const addonDetails = service.allowAddonPricing ? getSelectedAddonDetails() : [];
+    const addonDetails = getSelectedAddonDetails();
     const addonTotal = addonDetails.reduce((sum, addon) => sum + addon.price, 0);
     const addonHours = addonDetails.reduce((sum, addon) => sum + addon.hours, 0);
-    const taskAddonDetails = service.game === '崩坏：星穹铁道' ? getSelectedTaskAddonDetails() : [];
+    const taskAddonDetails = getSelectedTaskAddonDetails();
     const taskAddonTotal = taskAddonDetails.reduce((sum, item) => sum + item.price, 0);
     const taskAddonHours = taskAddonDetails.reduce((sum, item) => sum + item.hours, 0);
     if (service.allowCommissionPricing && !commissionDetails.length) {
@@ -1143,7 +1293,8 @@
     }
 
     const selectedTotal = commissionTotal + addonTotal + taskAddonTotal;
-    const finalPrice = (service.allowCommissionPricing || service.allowAddonPricing || service.allowTaskAddonPricing) ? `¥${selectedTotal}` : service.price;
+    const hasAnyAddonSelected = commissionDetails.length || addonDetails.length || taskAddonDetails.length;
+    const finalPrice = (service.allowCommissionPricing || service.allowAddonPricing || service.allowTaskAddonPricing || hasAnyAddonSelected) ? `¥${selectedTotal}` : service.price;
     const priceNoteParts = [service.priceNote];
     if (commissionDetails.length) priceNoteParts.push(`勾选委托 ¥${commissionTotal}`);
     if (addonDetails.length) priceNoteParts.push(`另加购小地图 ¥${addonTotal}`);
@@ -1473,6 +1624,7 @@
           orders: parsed.orders,
           accounts: Array.isArray(parsed.accounts) ? parsed.accounts : [],
           afterSales: Array.isArray(parsed.afterSales) ? parsed.afterSales : [],
+          customAddons: Array.isArray(parsed.customAddons) ? parsed.customAddons : [],
           session: parsed.session || null
         };
         saveState();
@@ -1610,6 +1762,15 @@
       case 'toggle-service':
         toggleService(id);
         break;
+      case 'edit-custom-addon':
+        editCustomAddon(id);
+        break;
+      case 'delete-custom-addon':
+        deleteCustomAddon(id);
+        break;
+      case 'toggle-custom-addon':
+        toggleCustomAddon(id);
+        break;
       case 'export':
         exportData();
         break;
@@ -1639,10 +1800,10 @@
       if (!input) return;
       const id = input.dataset.commissionId;
       if (input.checked) {
-        const item = COMMISSION_ADDONS.find((entry) => entry.id === id);
+        const item = getCommissionAddons().find((entry) => entry.id === id);
         if (item?.exclusiveGroup) {
           selectedCommissions = new Set([...selectedCommissions].filter((selectedId) => {
-            const selected = COMMISSION_ADDONS.find((entry) => entry.id === selectedId);
+            const selected = getCommissionAddons().find((entry) => entry.id === selectedId);
             return selected?.exclusiveGroup !== item.exclusiveGroup;
           }));
         }
@@ -1657,10 +1818,10 @@
       if (!input) return;
       const id = input.dataset.addonId;
       if (input.checked) {
-        const item = MAP_ADDONS.find((entry) => entry.id === id);
+        const item = getMapAddons().find((entry) => entry.id === id);
         if (item) {
           selectedAddons = new Set([...selectedAddons].filter((selectedId) => {
-            const selected = MAP_ADDONS.find((entry) => entry.id === selectedId);
+            const selected = getMapAddons().find((entry) => entry.id === selectedId);
             if (!selected || selected.game !== item.game || selected.group !== item.group) return true;
             return item.kind === 'full' ? selected.kind === 'full' : selected.kind !== 'full';
           }));
@@ -1676,11 +1837,11 @@
       if (!input) return;
       const id = input.dataset.taskAddonId;
       if (input.checked) {
-        const item = TASK_ADDONS.find((entry) => entry.id === id);
+        const item = getTaskAddons().find((entry) => entry.id === id);
         if (item) {
           const itemKey = item.subgroup || item.group;
           selectedTaskAddons = new Set([...selectedTaskAddons].filter((selectedId) => {
-            const selected = TASK_ADDONS.find((entry) => entry.id === selectedId);
+            const selected = getTaskAddons().find((entry) => entry.id === selectedId);
             if (!selected) return true;
             const selectedKey = selected.subgroup || selected.group;
             if (selectedKey !== itemKey) return true;
@@ -1700,6 +1861,8 @@
     $('#settingsForm').addEventListener('submit', saveSettings);
     $('#serviceForm').addEventListener('submit', saveService);
     $('#cancelEditService').addEventListener('click', resetServiceForm);
+    $('#customAddonForm').addEventListener('submit', saveCustomAddon);
+    $('#cancelEditCustomAddon').addEventListener('click', resetCustomAddonForm);
     $('#importInput').addEventListener('change', importData);
 
     $('#adminLoginForm').addEventListener('submit', (event) => {
