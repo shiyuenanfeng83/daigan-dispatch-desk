@@ -292,6 +292,28 @@ body {
 .addon-section .hint { margin: 0 0 12px; }
 .addon-list { display: grid; gap: 12px; max-height: 340px; overflow: auto; padding-right: 4px; }
 .addon-group h4 { margin: 0 0 8px; font-size: 12px; color: #cdd5ee; }
+.addon-group > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  cursor: pointer;
+  list-style: none;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #cdd5ee;
+}
+.addon-group > summary::-webkit-details-marker { display: none; }
+.addon-group > summary::before { content: '+'; color: var(--cyan); font-weight: 700; }
+.addon-group[open] > summary::before { content: '-'; }
+.addon-scope {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(61, 218, 215, 0.16);
+  color: var(--cyan);
+  font-size: 10px;
+}
+.addon-group > summary em { margin-left: auto; color: var(--gold); font-style: normal; font-size: 10px; }
 .addon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
 .addon-item {
   display: grid;
@@ -306,6 +328,7 @@ body {
   font-size: 12px;
 }
 .addon-item:hover { border-color: rgba(61, 218, 215, 0.45); background: rgba(61, 218, 215, 0.07); }
+.addon-item.full-option { border-color: rgba(255, 203, 107, 0.35); background: rgba(255, 203, 107, 0.07); }
 .addon-item input { accent-color: var(--cyan); }
 .addon-name { color: var(--text); }
 .addon-price { color: var(--gold); font-weight: 700; }

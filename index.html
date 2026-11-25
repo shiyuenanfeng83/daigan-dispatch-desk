@@ -91,9 +91,15 @@
               <select id="serviceSelect" name="serviceId" required></select>
             </label>
             <div id="servicePreview" class="service-preview"></div>
+            <div id="commissionSection" class="addon-section" hidden>
+              <h4>可勾选委托（可多选）</h4>
+              <p class="hint">所有委托已合并到这里，按单项价格勾选累加；含“每日 / 月托”等关系的选项互斥，避免重复收费。</p>
+              <div id="commissionList" class="addon-list"></div>
+              <div id="commissionTotal" class="addon-total">未勾选委托</div>
+            </div>
             <div id="addonSection" class="addon-section" hidden>
-              <h4>加购小地图（可多选）</h4>
-              <p class="hint">不拍全图时可在此单独勾选小地图；同一区域可多选，价格按单项累加。</p>
+              <h4>加购小地图（按国家 / 星球分组）</h4>
+              <p class="hint">国家 / 星球下方可勾选更小地图；选择“全图”后会自动取消该区域的小地图勾选。</p>
               <div id="addonList" class="addon-list"></div>
               <div id="addonTotal" class="addon-total">未选择加购小地图</div>
             </div>
@@ -286,6 +292,7 @@
                 <label class="field"><span>标签</span><input name="tag" placeholder="例如：热门 / 可包周" /></label>
                 <label class="field check-field"><span>在大厅展示</span><input name="enabled" type="checkbox" checked /></label>
                 <label class="field check-field"><span>按下方可选小地图计费</span><input name="allowAddonPricing" type="checkbox" /></label>
+                <label class="field check-field"><span>按可勾选委托计费</span><input name="allowCommissionPricing" type="checkbox" /></label>
               </div>
               <datalist id="gameOptions">
                 <option value="原神"></option>
