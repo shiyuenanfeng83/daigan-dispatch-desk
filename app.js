@@ -6,7 +6,7 @@
   const DEFAULT_SETTINGS = {
     title: '课余代肝 · 接单大厅',
     intro: '利用课余时间接单，主要覆盖原神、崩坏：星穹铁道的剧情推进、地图资源收集与每日委托，以及第五人格的日常活跃与加页手记。下单后按提交时间进入队列，进度可在排单看板查看。',
-    notice: '请下单前确认游戏账号可正常登录。价格暂未标注的服务请在下单后私聊确认，付款方式以双方沟通为准。当前为静态演示版：订单只保存在你自己的浏览器里，店主暂时无法收到，请勿填写真实账号密码。',
+    notice: '所有服务已标注公开参考价，计费单位写在价格旁，可在管理模式中自行修改。请下单前确认游戏账号可正常登录，付款方式以双方沟通为准。当前为静态演示版：订单只保存在你自己的浏览器里，店主暂时无法收到，请勿填写真实账号密码。',
     payment: '下单后请通过你填写的联系方式与我确认具体付款方式；建议先确认账号与需求，再完成付款。注意：静态版订单不会发送给店主，仅供本地演示。',
     hoursPerDay: 6,
     workStart: '19:00',
@@ -14,19 +14,19 @@
   };
 
   const DEFAULT_SERVICES = [
-    { id: 'genshin-story', game: '原神', category: '剧情任务', name: '原神主线剧情推进', desc: '按章节推进主线剧情，含必要前置任务与过场流程。', price: '', estimateHours: 3, tag: '剧情', enabled: true },
-    { id: 'genshin-legend', game: '原神', category: '剧情任务', name: '传说 / 角色任务代肝', desc: '完成角色传说任务、邀约事件等剧情内容，可按角色指定。', price: '', estimateHours: 2, tag: '剧情', enabled: true },
-    { id: 'genshin-world', game: '原神', category: '剧情任务', name: '世界任务清list', desc: '按区域清理世界任务与隐藏任务，适合探索度补完。', price: '', estimateHours: 4, tag: '探索', enabled: true },
-    { id: 'genshin-oculus', game: '原神', category: '地图资源', name: '地图资源收集 · 神瞳', desc: '按区域收集风神瞳、岩神瞳、草神瞳等，记录收集进度。', price: '', estimateHours: 4, tag: '收集', enabled: true },
-    { id: 'genshin-chest', game: '原神', category: '地图资源', name: '地图资源收集 · 宝箱与矿石', desc: '按区域清理宝箱、矿物、特产与圣遗物狗粮点。', price: '', estimateHours: 5, tag: '收集', enabled: true },
-    { id: 'genshin-daily', game: '原神', category: '每日委托', name: '原神每日委托代肝', desc: '完成每日四个委托与相关奖励，可按天或包周下单。', price: '', estimateHours: 0.5, tag: '可包周', enabled: true },
-    { id: 'hsr-story', game: '崩坏：星穹铁道', category: '剧情任务', name: '星穹铁道主线 / 同行任务', desc: '推进开拓任务、同行任务与角色剧情，可按章节指定。', price: '', estimateHours: 3, tag: '剧情', enabled: true },
-    { id: 'hsr-map', game: '崩坏：星穹铁道', category: '地图资源', name: '星穹铁道地图宝箱收集', desc: '按星球/区域清理宝箱、折纸小鸟、魔方与可交互收集物。', price: '', estimateHours: 4, tag: '收集', enabled: true },
-    { id: 'hsr-daily', game: '崩坏：星穹铁道', category: '每日委托', name: '星穹铁道每日委托代肝', desc: '完成每日实训、委托与活跃度奖励，可按天或包周下单。', price: '', estimateHours: 0.5, tag: '可包周', enabled: true },
-    { id: 'hsr-sim', game: '崩坏：星穹铁道', category: '玩法代肝', name: '模拟宇宙 / 差分宇宙代肝', desc: '按次数完成模拟宇宙或差分宇宙，含奖励领取。', price: '', estimateHours: 2, tag: '玩法', enabled: true },
-    { id: 'idv-daily', game: '第五人格', category: '日常活跃', name: '第五人格日常活跃代肝', desc: '清理每日任务、周推理之径与活跃奖励，可按天或包周下单。', price: '', estimateHours: 0.5, tag: '可包周', enabled: true },
-    { id: 'idv-notes', game: '第五人格', category: '手记代肝', name: '加页手记代肝', desc: '按页推进手记内容与相关任务，适合补页与赛季冲刺。', price: '', estimateHours: 2, tag: '手记', enabled: true },
-    { id: 'idv-rank', game: '第五人格', category: '日常活跃', name: '对战 / 排位活跃代肝', desc: '完成指定场次的匹配或排位，保持角色活跃度。', price: '', estimateHours: 1, tag: '对战', enabled: true }
+    { id: 'genshin-story', game: '原神', category: '剧情任务', name: '原神主线剧情推进', desc: '按章节推进主线剧情，含必要前置任务与过场流程。', price: '¥15 / 章', priceNote: '按章节计费，不含额外材料', estimateHours: 3, tag: '剧情', enabled: true },
+    { id: 'genshin-legend', game: '原神', category: '剧情任务', name: '传说 / 角色任务代肝', desc: '完成角色传说任务、邀约事件等剧情内容，可按角色指定。', price: '¥10 / 个', priceNote: '按单个任务计费', estimateHours: 2, tag: '剧情', enabled: true },
+    { id: 'genshin-world', game: '原神', category: '剧情任务', name: '世界任务清空', desc: '按区域清理世界任务与隐藏任务，适合探索度补完。', price: '¥20 / 区域', priceNote: '按区域计费', estimateHours: 4, tag: '探索', enabled: true },
+    { id: 'genshin-oculus', game: '原神', category: '地图资源', name: '地图资源收集 · 神瞳', desc: '按区域收集风神瞳、岩神瞳、草神瞳等，记录收集进度。', price: '¥20 / 区域', priceNote: '按区域计费', estimateHours: 4, tag: '收集', enabled: true },
+    { id: 'genshin-chest', game: '原神', category: '地图资源', name: '地图资源收集 · 宝箱与矿石', desc: '按区域清理宝箱、矿物、特产与圣遗物狗粮点。', price: '¥25 / 区域', priceNote: '按区域计费', estimateHours: 5, tag: '收集', enabled: true },
+    { id: 'genshin-daily', game: '原神', category: '每日委托', name: '原神每日委托代肝', desc: '完成每日四个委托与相关奖励，可按天或包周下单。', price: '¥3 / 天', priceNote: '按天计费，包周可优惠', estimateHours: 0.5, tag: '可包周', enabled: true },
+    { id: 'hsr-story', game: '崩坏：星穹铁道', category: '剧情任务', name: '星穹铁道主线 / 同行任务', desc: '推进开拓任务、同行任务与角色剧情，可按章节指定。', price: '¥15 / 章', priceNote: '按章节计费', estimateHours: 3, tag: '剧情', enabled: true },
+    { id: 'hsr-map', game: '崩坏：星穹铁道', category: '地图资源', name: '星穹铁道地图宝箱收集', desc: '按星球/区域清理宝箱、折纸小鸟、魔方与可交互收集物。', price: '¥25 / 星球', priceNote: '按星球区域计费', estimateHours: 4, tag: '收集', enabled: true },
+    { id: 'hsr-daily', game: '崩坏：星穹铁道', category: '每日委托', name: '星穹铁道每日委托代肝', desc: '完成每日实训、委托与活跃度奖励，可按天或包周下单。', price: '¥3 / 天', priceNote: '按天计费，包周可优惠', estimateHours: 0.5, tag: '可包周', enabled: true },
+    { id: 'hsr-sim', game: '崩坏：星穹铁道', category: '玩法代肝', name: '模拟宇宙 / 差分宇宙代肝', desc: '按次数完成模拟宇宙或差分宇宙，含奖励领取。', price: '¥10 / 次', priceNote: '按次计费', estimateHours: 2, tag: '玩法', enabled: true },
+    { id: 'idv-daily', game: '第五人格', category: '日常活跃', name: '第五人格日常活跃代肝', desc: '清理每日任务、周推理之径与活跃奖励，可按天或包周下单。', price: '¥3 / 天', priceNote: '按天计费，包周可优惠', estimateHours: 0.5, tag: '可包周', enabled: true },
+    { id: 'idv-notes', game: '第五人格', category: '手记代肝', name: '加页手记代肝', desc: '按页推进手记内容与相关任务，适合补页与赛季冲刺。', price: '¥12 / 页', priceNote: '按页计费', estimateHours: 2, tag: '手记', enabled: true },
+    { id: 'idv-rank', game: '第五人格', category: '日常活跃', name: '对战 / 排位活跃代肝', desc: '完成指定场次的匹配或排位，保持角色活跃度。', price: '¥8 / 10场', priceNote: '按 10 场计费', estimateHours: 1, tag: '对战', enabled: true }
   ];
 
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -57,9 +57,21 @@
       if (!raw) return defaultState();
       const parsed = JSON.parse(raw);
       const base = defaultState();
+      const settings = { ...base.settings, ...(parsed.settings || {}) };
+      if (!String(settings.notice || '').includes('公开参考价')) {
+        settings.notice = `${settings.notice || ''} 所有服务已标注公开参考价，可在管理模式自行修改。`.trim();
+      }
+      const services = Array.isArray(parsed.services)
+        ? parsed.services.map((service) => {
+            const preset = base.services.find((item) => item.id === service.id);
+            const price = String(service.price || '').trim() ? service.price : (preset?.price || '');
+            const priceNote = String(service.priceNote || '').trim() ? service.priceNote : (preset?.priceNote || '');
+            return { ...service, price, priceNote };
+          })
+        : base.services;
       return {
-        settings: { ...base.settings, ...(parsed.settings || {}) },
-        services: Array.isArray(parsed.services) ? parsed.services : base.services,
+        settings,
+        services,
         orders: Array.isArray(parsed.orders) ? parsed.orders : []
       };
     } catch {
@@ -215,7 +227,7 @@
     const keyword = ($('#hallSearch').value || '').trim().toLowerCase();
     const visible = services.filter((service) => {
       const matchGame = hallFilter === '全部' || (service.game || '其他') === hallFilter;
-      const text = `${service.name} ${service.desc} ${service.category} ${service.tag}`.toLowerCase();
+      const text = `${service.name} ${service.desc} ${service.category} ${service.tag} ${service.price || ''} ${service.priceNote || ''}`.toLowerCase();
       return matchGame && (!keyword || text.includes(keyword));
     });
 
@@ -230,10 +242,14 @@
           </div>
           <h3 class="card-title">${esc(service.name)}</h3>
           <p class="card-desc">${esc(service.desc || '暂无详细说明')}</p>
+          <div class="price-box">
+            <span class="price-label">公开报价</span>
+            <span class="price ${price.soft ? 'soft' : ''}">${esc(price.text)}</span>
+            ${service.priceNote ? `<span class="price-note">${esc(service.priceNote)}</span>` : ''}
+          </div>
           <p class="estimate">分类：${esc(service.category || '其他')} · 预计 ${Number(service.estimateHours) || 1} 小时</p>
           <div class="card-meta">
-            <span class="price ${price.soft ? 'soft' : ''}">${esc(price.text)}</span>
-            <button class="card-action" data-action="service-order" data-id="${esc(service.id)}">选择下单</button>
+            <button class="card-action" data-action="service-order" data-id="${esc(service.id)}">按此价格下单</button>
           </div>
         </article>
       `;
@@ -269,13 +285,15 @@
     }
 
     const price = formatPrice(service.price);
-    preview.textContent = `${service.desc || '暂无详细说明'} ｜ ${price.text} ｜ 预计 ${Number(service.estimateHours) || 1} 小时`;
+    const priceNote = service.priceNote ? `（${service.priceNote}）` : '';
+    preview.textContent = `${service.desc || '暂无详细说明'} ｜ 公开报价 ${price.text}${priceNote} ｜ 预计 ${Number(service.estimateHours) || 1} 小时`;
     summary.innerHTML = `
       <h3>当前选择</h3>
       <div class="summary-row"><span>游戏</span><strong>${esc(service.game)}</strong></div>
       <div class="summary-row"><span>服务</span><strong>${esc(service.name)}</strong></div>
       <div class="summary-row"><span>分类</span><strong>${esc(service.category || '其他')}</strong></div>
-      <div class="summary-row"><span>价格</span><strong>${esc(price.text)}</strong></div>
+      <div class="summary-row"><span>公开报价</span><strong class="summary-price">${esc(price.text)}</strong></div>
+      ${service.priceNote ? `<div class="summary-row"><span>价格说明</span><strong>${esc(service.priceNote)}</strong></div>` : ''}
       <div class="summary-row"><span>预计耗时</span><strong>${Number(service.estimateHours) || 1} 小时</strong></div>
     `;
   }
@@ -351,7 +369,8 @@
             <div class="info-item"><span>登录方式</span><strong>${esc(order.loginType || '-')}</strong></div>
             <div class="info-item"><span>预计开工</span><strong>${esc(order.estimateStart ? formatDateTime(order.estimateStart) : '待排')}</strong></div>
             <div class="info-item"><span>预计完成</span><strong>${esc(order.estimateEnd ? formatDateTime(order.estimateEnd) : '待排')}</strong></div>
-            <div class="info-item"><span>报价</span><strong>${esc(formatPrice(order.price).text)}</strong></div>
+            <div class="info-item"><span>公开报价</span><strong>${esc(formatPrice(order.price).text)}</strong></div>
+            ${order.priceNote ? `<div class="info-item"><span>价格说明</span><strong>${esc(order.priceNote)}</strong></div>` : ''}
           </div>
 
           ${noteParts.length ? `<div class="order-note">备注：${noteParts.map(esc).join(' ｜ ')}</div>` : ''}
@@ -396,7 +415,7 @@
           <div class="admin-item-head">
             <div>
               <strong>${esc(service.name)}</strong>
-              <div class="admin-meta">${esc(service.game)} / ${esc(service.category || '其他')} · ${esc(price.text)} · ${Number(service.estimateHours) || 1} 小时${service.enabled === false ? ' · 已隐藏' : ''}</div>
+              <div class="admin-meta">${esc(service.game)} / ${esc(service.category || '其他')} · ${esc(price.text)}${service.priceNote ? `（${esc(service.priceNote)}）` : ''} · ${Number(service.estimateHours) || 1} 小时${service.enabled === false ? ' · 已隐藏' : ''}</div>
             </div>
             <span class="game-badge" style="--game-color:${gameColor(service.game)}">${esc(service.game)}</span>
           </div>
@@ -441,6 +460,7 @@
       game: service.game,
       category: service.category,
       price: service.price,
+      priceNote: service.priceNote || '',
       estimateHours: Number(service.estimateHours) || 1,
       customerName: String(data.get('customerName') || '').trim(),
       contactType: String(data.get('contactType') || ''),
@@ -470,6 +490,8 @@
       <h3>下单成功</h3>
       <p class="muted">订单号 ${esc(order.id.slice(-6).toUpperCase())}</p>
       <div class="queue-big">第 ${queueNumber} 位</div>
+      <div class="summary-row"><span>公开报价</span><strong class="summary-price">${esc(formatPrice(order.price).text)}</strong></div>
+      ${order.priceNote ? `<div class="summary-row"><span>价格说明</span><strong>${esc(order.priceNote)}</strong></div>` : ''}
       <p class="muted">已按下单时间进入队列，预计开工：${esc(order.estimateStart ? formatDateTime(order.estimateStart) : '待排')}</p>
     `;
     form.reset();
@@ -543,6 +565,8 @@
     const text = [
       `排单号：#${queueNumber}`,
       `服务：${order.game} / ${order.serviceName}`,
+      `公开报价：${formatPrice(order.price).text}`,
+      `价格说明：${order.priceNote || '-'}`,
       `顾客：${order.customerName}`,
       `联系方式：${order.contactType} ${order.contact}`,
       `付款方式：${order.paymentMethod || '待确认'}`,
@@ -608,6 +632,7 @@
       name: String(data.get('name') || '').trim(),
       desc: String(data.get('desc') || '').trim(),
       price: String(data.get('price') || '').trim(),
+      priceNote: String(data.get('priceNote') || '').trim(),
       estimateHours: Math.max(0.5, Number(data.get('estimateHours')) || 1),
       tag: String(data.get('tag') || '').trim(),
       enabled: data.has('enabled')
@@ -643,6 +668,7 @@
     form.elements.name.value = service.name || '';
     form.elements.desc.value = service.desc || '';
     form.elements.price.value = service.price || '';
+    form.elements.priceNote.value = service.priceNote || '';
     form.elements.estimateHours.value = service.estimateHours || 1;
     form.elements.tag.value = service.tag || '';
     form.elements.enabled.checked = service.enabled !== false;
