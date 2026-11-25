@@ -6,7 +6,7 @@
   const DEFAULT_SETTINGS = {
     title: '课余代肝 · 接单大厅',
     intro: '利用课余时间接单，主要覆盖原神、崩坏：星穹铁道的剧情推进、地图资源收集与每日委托，以及第五人格的日常活跃与加页手记。下单后按提交时间进入队列，进度可在排单看板查看。',
-    notice: '所有服务已标注公开参考价，计费单位写在价格旁，可在管理模式中自行修改。大地图套餐已包含所属小地图，月托套餐已包含每日委托，不重复收费。请下单前确认游戏账号可正常登录，付款方式以双方沟通为准。当前为静态演示版：订单只保存在你自己的浏览器里，店主暂时无法收到，请勿填写真实账号密码。',
+    notice: '所有服务已标注公开参考价，计费单位写在价格旁，可在管理模式中自行修改。大地图套餐已包含所属小地图；不想拍全图可选“小地图单独代肝”，并在下单页勾选多个小地图，按单项价格累加。月托套餐已包含每日委托，不重复收费。请下单前确认游戏账号可正常登录，付款方式以双方沟通为准。当前为静态演示版：订单只保存在你自己的浏览器里，店主暂时无法收到，请勿填写真实账号密码。',
     payment: '下单后请通过你填写的联系方式与我确认具体付款方式；建议先确认账号与需求，再完成付款。注意：静态版订单不会发送给店主，仅供本地演示。',
     hoursPerDay: 6,
     workStart: '19:00',
@@ -16,6 +16,7 @@
   const DEFAULT_SERVICES = [
     { id: 'genshin-monthly', game: '原神', category: '日常托管', name: '原神月常委托（含每日委托）', desc: '按月托管每日委托、树脂与每周委托，避免每天重复下单。', price: '¥28 / 月', priceNote: '月付包含每日委托，无需另拍每日单', includes: '每日委托、树脂、每周委托', estimateHours: 1, tag: '含每日', enabled: true },
     { id: 'genshin-daily', game: '原神', category: '日常委托', name: '原神每日委托单日', desc: '完成当日四个委托及相关奖励。', price: '¥3 / 天', priceNote: '按月委托更划算', includes: '当日四个委托与奖励', estimateHours: 0.5, tag: '单日', enabled: true },
+    { id: 'genshin-single-map', game: '原神', category: '地图探索', name: '原神小地图单独代肝（可多选）', desc: '不拍全图，直接在下单页勾选一个或多个小地图，按单项价格加购。', price: '按下方小地图加购计费', priceNote: '单项价格按价目表，支持多选累加', includes: '在下单页勾选单个小地图，可多选', estimateHours: 1, tag: '可多选', allowAddonPricing: true, enabled: true },
     { id: 'genshin-story-full', game: '原神', category: '剧情任务', name: '原神魔神任务全包', desc: '从序章推进至当前版本魔神任务。', price: '¥330 / 全包', priceNote: '单章 ¥15 起，按章节另拍', includes: '序章至当前版本全部魔神任务', estimateHours: 20, tag: '全包', enabled: true },
     { id: 'genshin-story-chapter', game: '原神', category: '剧情任务', name: '原神魔神任务单章', desc: '按指定章节推进魔神任务剧情。', price: '¥15 / 章', priceNote: '部分长章节 ¥10-20', includes: '指定章节剧情与前置', estimateHours: 3, tag: '剧情', enabled: true },
     { id: 'genshin-legend', game: '原神', category: '剧情任务', name: '原神传说任务', desc: '完成指定角色传说任务。', price: '¥20 / 个', priceNote: '长任务 ¥25-30', includes: '指定传说任务', estimateHours: 2, tag: '剧情', enabled: true },
@@ -31,6 +32,7 @@
     { id: 'hsr-events', game: '崩坏：星穹铁道', category: '玩法代肝', name: '星穹铁道常驻活动代肝', desc: '按项完成常驻活动内容，不含剧情。', price: '¥12 / 项', priceNote: '按活动项计费', includes: '指定常驻活动（不含剧情）', estimateHours: 1.5, tag: '活动', enabled: true },
     { id: 'hsr-map', game: '崩坏：星穹铁道', category: '地图探索', name: '星穹铁道大地图全收集（大图包小图）', desc: '按星球大地图打包，已包含所属小地图与区域内容。', price: '¥15 起 / 大图', priceNote: '空间站15 雅利洛VI30 仙舟罗浮120 匹诺康尼420 翁法罗斯190 二相乐园150', includes: '宝箱、折纸小鸟、解密、成就及小地图', estimateHours: 8, tag: '大图包', enabled: true },
     { id: 'hsr-pulls', game: '崩坏：星穹铁道', category: '玩法代肝', name: '星穹铁道地图抽数代刷', desc: '按抽数完成地图抽卡类收集内容。', price: '¥1.8 / 抽', priceNote: '低探1.8 / 中探2.5 / 高探3.2 每抽', includes: '指定地图抽数', estimateHours: 1, tag: '抽数', enabled: true },
+    { id: 'hsr-single-map', game: '崩坏：星穹铁道', category: '地图探索', name: '星穹铁道小地图单独代肝（可多选）', desc: '不拍全图，直接在下单页勾选一个或多个小地图，按单项价格加购。', price: '按下方小地图加购计费', priceNote: '单项价格按价目表，支持多选累加', includes: '在下单页勾选单个小地图，可多选', estimateHours: 1, tag: '可多选', allowAddonPricing: true, enabled: true },
     { id: 'idv-weekly', game: '第五人格', category: '周常任务', name: '第五人格周上限', desc: '完成每周上限任务。', price: '¥20 / 周', priceNote: '单周 1w ¥5；包月 ¥80', includes: '每周上限任务', estimateHours: 2, tag: '周常', enabled: true },
     { id: 'idv-weekly-month', game: '第五人格', category: '周常任务', name: '第五人格周上限包月', desc: '整月周上限任务打包。', price: '¥80 / 月', priceNote: '按月计费', includes: '整月周上限任务', estimateHours: 8, tag: '包月', enabled: true },
     { id: 'idv-checkin', game: '第五人格', category: '日常委托', name: '第五人格每日签到', desc: '按周完成每日签到。', price: '¥3.5 / 周', priceNote: '按周计费', includes: '每日签到', estimateHours: 0.5, tag: '日常', enabled: true },
@@ -44,6 +46,48 @@
     { id: 'idv-feather', game: '第五人格', category: '加页手记', name: '第五人格羽毛添页', desc: '按页完成羽毛添页内容。', price: '¥0.3 / 页', priceNote: '添页 ¥0.35 / 页', includes: '羽毛 / 添页指定页数', estimateHours: 0.5, tag: '添页', enabled: true }
   ];
 
+  const MAP_ADDONS = [
+    { id: 'gi-mondstadt', game: '原神', group: '蒙德', name: '蒙德本土', price: 120, hours: 5, note: '满探；全宝箱 ¥150' },
+    { id: 'gi-dragonspine', game: '原神', group: '蒙德', name: '雪山', price: 120, hours: 5, note: '满探；全宝箱 ¥150' },
+    { id: 'gi-windsong', game: '原神', group: '蒙德', name: '风雪山神瞳', price: 110, hours: 4, note: '满探；全宝箱 ¥140' },
+    { id: 'gi-liyue', game: '原神', group: '璃月', name: '璃月本土', price: 270, hours: 10, note: '满探；全宝箱 ¥320' },
+    { id: 'gi-chasm', game: '原神', group: '璃月', name: '层岩巨渊上下层', price: 140, hours: 5, note: '满探；全宝箱 ¥160' },
+    { id: 'gi-chenyu', game: '原神', group: '璃月', name: '沉玉谷', price: 140, hours: 5, note: '满探；全宝箱 ¥160' },
+    { id: 'gi-inazuma', game: '原神', group: '稻妻', name: '稻妻本土', price: 390, hours: 14, note: '满探；全宝箱 ¥500' },
+    { id: 'gi-enkanomiya', game: '原神', group: '稻妻', name: '渊下宫', price: 120, hours: 5, note: '满探；全宝箱 ¥150' },
+    { id: 'gi-sumeru', game: '原神', group: '须弥', name: '须弥本土', price: 200, hours: 8, note: '满探；全宝箱 ¥240' },
+    { id: 'gi-desert', game: '原神', group: '须弥', name: '沙漠', price: 230, hours: 8, note: '满探；全宝箱 ¥280' },
+    { id: 'gi-khareth', game: '原神', group: '须弥', name: '千壑沙地', price: 180, hours: 7, note: '满探' },
+    { id: 'gi-ara', game: '原神', group: '须弥', name: '苍漠囿土', price: 140, hours: 5, note: '满探；全宝箱 ¥200' },
+    { id: 'gi-fontaine40', game: '原神', group: '枫丹', name: '枫丹 4.0', price: 150, hours: 6, note: '满探；全宝箱 ¥180' },
+    { id: 'gi-fontaine41', game: '原神', group: '枫丹', name: '枫丹 4.1', price: 150, hours: 6, note: '满探；全宝箱 ¥180' },
+    { id: 'gi-fontaine42', game: '原神', group: '枫丹', name: '枫丹 4.2', price: 100, hours: 4, note: '满探；全宝箱 ¥120' },
+    { id: 'gi-fontaine43', game: '原神', group: '枫丹', name: '枫丹 4.3', price: 90, hours: 4, note: '满探；全宝箱 ¥100' },
+    { id: 'gi-natlan50', game: '原神', group: '纳塔', name: '纳塔 5.0', price: 150, hours: 6, note: '满探；全宝箱 ¥180' },
+    { id: 'gi-natlan52', game: '原神', group: '纳塔', name: '纳塔 5.2', price: 100, hours: 4, note: '满探；全宝箱 ¥120' },
+    { id: 'gi-natlan55', game: '原神', group: '纳塔', name: '纳塔 5.5', price: 90, hours: 4, note: '满探；全宝箱 ¥100' },
+    { id: 'gi-natlan58', game: '原神', group: '纳塔', name: '纳塔 5.8', price: 90, hours: 4, note: '满探；全宝箱 ¥100' },
+    { id: 'gi-nodkrai60', game: '原神', group: '挪德卡莱', name: '挪德卡莱 6.0', price: 130, hours: 5, note: '满探；全宝箱 ¥150' },
+    { id: 'gi-nodkrai61', game: '原神', group: '挪德卡莱', name: '挪德卡莱 6.1', price: 120, hours: 5, note: '满探；全宝箱 ¥140' },
+    { id: 'gi-nodkrai62', game: '原神', group: '挪德卡莱', name: '挪德卡莱 6.2', price: 100, hours: 4, note: '满探；全宝箱 ¥120' },
+    { id: 'gi-nodkrai63', game: '原神', group: '挪德卡莱', name: '挪德卡莱 6.3', price: 90, hours: 4, note: '满探；全宝箱 ¥100' },
+    { id: 'gi-snezhnaya70', game: '原神', group: '至冬', name: '至冬 7.0', price: 200, hours: 8, note: '满探；全宝箱 ¥230' },
+    { id: 'gi-snezhnaya71', game: '原神', group: '至冬', name: '至冬 7.1', price: 160, hours: 6, note: '满探；全宝箱 ¥200' },
+    { id: 'gi-snezhnaya72', game: '原神', group: '至冬', name: '至冬 7.2', price: 140, hours: 6, note: '满探' },
+    { id: 'hsr-space', game: '崩坏：星穹铁道', group: '空间站', name: '空间站「黑塔」全收集', price: 15, hours: 2, note: '宝箱、解密、成就' },
+    { id: 'hsr-belobog', game: '崩坏：星穹铁道', group: '雅利洛VI', name: '雅利洛VI 全收集', price: 30, hours: 3, note: '宝箱、解密、成就' },
+    { id: 'hsr-xianzhou', game: '崩坏：星穹铁道', group: '仙舟罗浮', name: '仙舟「罗浮」全收集', price: 120, hours: 6, note: '宝箱、解密、成就' },
+    { id: 'hsr-penacony-chest', game: '崩坏：星穹铁道', group: '匹诺康尼', name: '匹诺康尼 全宝箱', price: 100, hours: 6, note: '单项加购' },
+    { id: 'hsr-penacony-bird', game: '崩坏：星穹铁道', group: '匹诺康尼', name: '匹诺康尼 折纸小鸟', price: 30, hours: 2, note: '单项加购' },
+    { id: 'hsr-penacony-full', game: '崩坏：星穹铁道', group: '匹诺康尼', name: '匹诺康尼 大地图全收集', price: 420, hours: 16, note: '含全宝箱、折纸小鸟、解密、成就' },
+    { id: 'hsr-amphoreus-chest', game: '崩坏：星穹铁道', group: '翁法罗斯', name: '翁法罗斯 全宝箱', price: 160, hours: 8, note: '单项加购' },
+    { id: 'hsr-amphoreus-cangming', game: '崩坏：星穹铁道', group: '翁法罗斯', name: '翁法罗斯 苍冥', price: 40, hours: 2, note: '单项加购' },
+    { id: 'hsr-amphoreus-sheep', game: '崩坏：星穹铁道', group: '翁法罗斯', name: '翁法罗斯 羊头', price: 15, hours: 1, note: '单项加购' },
+    { id: 'hsr-amphoreus-full', game: '崩坏：星穹铁道', group: '翁法罗斯', name: '翁法罗斯 大地图全收集', price: 190, hours: 10, note: '含全宝箱、苍冥、羊头' },
+    { id: 'hsr-twoworld', game: '崩坏：星穹铁道', group: '二相乐园', name: '二相乐园 全收集', price: 150, hours: 7, note: '宝箱、解密、成就' },
+    { id: 'hsr-thousand', game: '崩坏：星穹铁道', group: '千星乐园', name: '千星乐园 全收集', price: 85, hours: 5, note: '宝箱、解密、成就' }
+  ];
+
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
@@ -52,6 +96,7 @@
   let editingServiceId = null;
   let hallFilter = '全部';
   let boardFilter = '全部';
+  let selectedAddons = new Set();
   let toastTimer = null;
 
   function clone(value) {
@@ -78,6 +123,9 @@
       }
       if (!String(settings.notice || '').includes('大地图套餐')) {
         settings.notice = `${settings.notice || ''} 大地图套餐已包含所属小地图，月托套餐已包含每日委托，不重复收费。`.trim();
+      }
+      if (!String(settings.notice || '').includes('小地图单独代肝')) {
+        settings.notice = `${settings.notice || ''} 不想拍全图可选“小地图单独代肝”，并在下单页勾选多个小地图，按单项价格累加。`.trim();
       }
       const customServices = Array.isArray(parsed.services)
         ? parsed.services.filter((service) => String(service.id || '').startsWith('svc-'))
@@ -288,6 +336,60 @@
     updateServicePreview();
   }
 
+  function getSelectedAddonDetails() {
+    return MAP_ADDONS.filter((addon) => selectedAddons.has(addon.id));
+  }
+
+  function updateAddonTotal() {
+    const details = getSelectedAddonDetails();
+    const total = details.reduce((sum, addon) => sum + addon.price, 0);
+    const totalEl = $('#addonTotal');
+    const summaryEl = $('#summaryAddons');
+    if (totalEl) {
+      totalEl.textContent = details.length ? `已选 ${details.length} 项，加购合计 ¥${total}` : '未选择加购小地图';
+    }
+    if (summaryEl) {
+      summaryEl.innerHTML = details.length ? `
+        <div class="summary-row"><span>加购小地图</span><strong>${details.map((addon) => esc(addon.name)).join('、')}</strong></div>
+        <div class="summary-row"><span>加购合计</span><strong class="summary-price">¥${total}</strong></div>
+      ` : '';
+    }
+  }
+
+  function renderAddons(game) {
+    const section = $('#addonSection');
+    const list = $('#addonList');
+    if (!section || !list) return;
+
+    const options = MAP_ADDONS.filter((addon) => addon.game === game);
+    selectedAddons = new Set([...selectedAddons].filter((id) => options.some((addon) => addon.id === id)));
+
+    if (!options.length) {
+      section.hidden = true;
+      updateAddonTotal();
+      return;
+    }
+
+    section.hidden = false;
+    const groups = Array.from(new Set(options.map((addon) => addon.group)));
+    list.innerHTML = groups.map((group) => `
+      <div class="addon-group">
+        <h4>${esc(group)}</h4>
+        <div class="addon-grid">
+          ${options.filter((addon) => addon.group === group).map((addon) => `
+            <label class="addon-item">
+              <input type="checkbox" data-addon-id="${esc(addon.id)}" ${selectedAddons.has(addon.id) ? 'checked' : ''} />
+              <span class="addon-name">${esc(addon.name)}</span>
+              <span class="addon-price">¥${addon.price}</span>
+              <span class="addon-note">${esc(addon.note)}</span>
+            </label>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+    updateAddonTotal();
+  }
+
   function updateServicePreview() {
     const service = getService($('#serviceSelect').value);
     const preview = $('#servicePreview');
@@ -296,6 +398,7 @@
     if (!service) {
       preview.textContent = '当前没有可下单的服务，请先在管理模式中创建。';
       summary.innerHTML = '<h3>当前选择</h3><p class="muted">尚未选择服务</p>';
+      renderAddons('');
       return;
     }
 
@@ -310,8 +413,10 @@
       <div class="summary-row"><span>公开报价</span><strong class="summary-price">${esc(price.text)}</strong></div>
       ${service.priceNote ? `<div class="summary-row"><span>价格说明</span><strong>${esc(service.priceNote)}</strong></div>` : ''}
       ${service.includes ? `<div class="summary-row"><span>包含内容</span><strong>${esc(service.includes)}</strong></div>` : ''}
+      <div id="summaryAddons"></div>
       <div class="summary-row"><span>预计耗时</span><strong>${Number(service.estimateHours) || 1} 小时</strong></div>
     `;
+    renderAddons(service.game);
   }
 
   function renderBoard() {
@@ -388,6 +493,7 @@
             <div class="info-item"><span>公开报价</span><strong>${esc(formatPrice(order.price).text)}</strong></div>
             ${order.priceNote ? `<div class="info-item"><span>价格说明</span><strong>${esc(order.priceNote)}</strong></div>` : ''}
             ${order.includes ? `<div class="info-item"><span>包含内容</span><strong>${esc(order.includes)}</strong></div>` : ''}
+            ${order.addons?.length ? `<div class="info-item"><span>加购小地图</span><strong>${order.addons.map((addon) => esc(addon.name)).join('、')}</strong></div><div class="info-item"><span>加购合计</span><strong>¥${order.addonTotal}</strong></div>` : ''}
           </div>
 
           ${noteParts.length ? `<div class="order-note">备注：${noteParts.map(esc).join(' ｜ ')}</div>` : ''}
@@ -432,7 +538,7 @@
           <div class="admin-item-head">
             <div>
               <strong>${esc(service.name)}</strong>
-              <div class="admin-meta">${esc(service.game)} / ${esc(service.category || '其他')} · ${esc(price.text)}${service.priceNote ? `（${esc(service.priceNote)}）` : ''}${service.includes ? ` · 含：${esc(service.includes)}` : ''} · ${Number(service.estimateHours) || 1} 小时${service.enabled === false ? ' · 已隐藏' : ''}</div>
+              <div class="admin-meta">${esc(service.game)} / ${esc(service.category || '其他')} · ${esc(price.text)}${service.priceNote ? `（${esc(service.priceNote)}）` : ''}${service.includes ? ` · 含：${esc(service.includes)}` : ''} · ${Number(service.estimateHours) || 1} 小时${service.allowAddonPricing ? ' · 按加购计费' : ''}${service.enabled === false ? ' · 已隐藏' : ''}</div>
             </div>
             <span class="game-badge" style="--game-color:${gameColor(service.game)}">${esc(service.game)}</span>
           </div>
@@ -468,6 +574,20 @@
       return;
     }
 
+    const addonDetails = getSelectedAddonDetails();
+    const addonTotal = addonDetails.reduce((sum, addon) => sum + addon.price, 0);
+    const addonHours = addonDetails.reduce((sum, addon) => sum + addon.hours, 0);
+    if (service.allowAddonPricing && !addonDetails.length) {
+      showToast('请至少勾选一个小地图', 'error');
+      return;
+    }
+
+    const finalPrice = service.allowAddonPricing ? `¥${addonTotal}` : service.price;
+    const priceNoteParts = [service.priceNote];
+    if (addonDetails.length) priceNoteParts.push(`另加购小地图 ¥${addonTotal}`);
+    const includesParts = [service.includes];
+    if (addonDetails.length) includesParts.push(addonDetails.map((addon) => addon.name).join('、'));
+
     const data = new FormData(form);
     const nextIndex = state.orders.reduce((max, order) => Math.max(max, Number(order.queueIndex ?? 0)), -1) + 1;
     const order = {
@@ -476,10 +596,12 @@
       serviceName: service.name,
       game: service.game,
       category: service.category,
-      price: service.price,
-      priceNote: service.priceNote || '',
-      includes: service.includes || '',
-      estimateHours: Number(service.estimateHours) || 1,
+      price: finalPrice,
+      priceNote: priceNoteParts.filter(Boolean).join('；'),
+      includes: includesParts.filter(Boolean).join('；'),
+      addons: addonDetails.map((addon) => ({ id: addon.id, name: addon.name, price: addon.price, note: addon.note })),
+      addonTotal,
+      estimateHours: (Number(service.estimateHours) || 1) + addonHours,
       customerName: String(data.get('customerName') || '').trim(),
       contactType: String(data.get('contactType') || ''),
       contact: String(data.get('contact') || '').trim(),
@@ -511,9 +633,11 @@
       <div class="summary-row"><span>公开报价</span><strong class="summary-price">${esc(formatPrice(order.price).text)}</strong></div>
       ${order.priceNote ? `<div class="summary-row"><span>价格说明</span><strong>${esc(order.priceNote)}</strong></div>` : ''}
       ${order.includes ? `<div class="summary-row"><span>包含内容</span><strong>${esc(order.includes)}</strong></div>` : ''}
+      ${order.addons?.length ? `<div class="summary-row"><span>加购小地图</span><strong>${order.addons.map((addon) => esc(addon.name)).join('、')}</strong></div><div class="summary-row"><span>加购合计</span><strong class="summary-price">¥${order.addonTotal}</strong></div>` : ''}
       <p class="muted">已按下单时间进入队列，预计开工：${esc(order.estimateStart ? formatDateTime(order.estimateStart) : '待排')}</p>
     `;
     form.reset();
+    selectedAddons.clear();
     renderAll();
     showToast('订单已提交，请在右侧查看排单号', 'success');
     result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -587,6 +711,8 @@
       `公开报价：${formatPrice(order.price).text}`,
       `价格说明：${order.priceNote || '-'}`,
       `包含内容：${order.includes || '-'}`,
+      `加购小地图：${order.addons?.length ? order.addons.map((addon) => `${addon.name} ¥${addon.price}`).join('、') : '-'}`,
+      `加购合计：¥${order.addonTotal || 0}`,
       `顾客：${order.customerName}`,
       `联系方式：${order.contactType} ${order.contact}`,
       `付款方式：${order.paymentMethod || '待确认'}`,
@@ -656,7 +782,8 @@
       includes: String(data.get('includes') || '').trim(),
       estimateHours: Math.max(0.5, Number(data.get('estimateHours')) || 1),
       tag: String(data.get('tag') || '').trim(),
-      enabled: data.has('enabled')
+      enabled: data.has('enabled'),
+      allowAddonPricing: data.has('allowAddonPricing')
     };
 
     if (!payload.game || !payload.category || !payload.name) {
@@ -690,10 +817,13 @@
     form.elements.desc.value = service.desc || '';
     form.elements.price.value = service.price || '';
     form.elements.priceNote.value = service.priceNote || '';
-    form.elements.namedItem('includes').value = service.includes || '';
+    const includesInput = form.elements.namedItem('includes');
+    if (includesInput) includesInput.value = service.includes || '';
     form.elements.estimateHours.value = service.estimateHours || 1;
     form.elements.tag.value = service.tag || '';
     form.elements.enabled.checked = service.enabled !== false;
+    const addonPricingInput = form.elements.namedItem('allowAddonPricing');
+    if (addonPricingInput) addonPricingInput.checked = service.allowAddonPricing === true;
     $('#serviceFormTitle').textContent = '编辑代肝服务';
     $('#serviceSubmitBtn').textContent = '保存修改';
     $('#cancelEditService').hidden = false;
@@ -893,6 +1023,13 @@
     $('#hallSearch').addEventListener('input', renderHall);
     $('#boardSearch').addEventListener('input', renderBoard);
     $('#serviceSelect').addEventListener('change', updateServicePreview);
+    $('#addonList').addEventListener('change', (event) => {
+      const input = event.target.closest('input[data-addon-id]');
+      if (!input) return;
+      if (input.checked) selectedAddons.add(input.dataset.addonId);
+      else selectedAddons.delete(input.dataset.addonId);
+      updateAddonTotal();
+    });
     $('#orderForm').addEventListener('submit', submitOrder);
     $('#settingsForm').addEventListener('submit', saveSettings);
     $('#serviceForm').addEventListener('submit', saveService);
